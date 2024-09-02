@@ -21,7 +21,7 @@ WORKDIR /app
 COPY --from=Build /app/target/*.jar app.jar
 
 # Expõe a porta em que a aplicação será executada
-EXPOSE 8083
+EXPOSE 8080
 
 # Define o comando padrão para executar a aplicação
 ENTRYPOINT ["java", "-jar", "app.jar"]
