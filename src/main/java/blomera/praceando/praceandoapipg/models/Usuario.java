@@ -30,7 +30,7 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
     @Schema(description = "Identificador único do usuário.", example = "1")
-    private long idUsuario;
+    private Long id;
 
     @Column(name = "cd_inventario_avatar")
     @Schema(description = "Código do avatar do usuário.", example = "101")
