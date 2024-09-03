@@ -33,6 +33,8 @@ public class ProdutoController {
             // Faz o upload da imagem e obtém a URL
             String imageUrl = firebaseStorageService.uploadFile(file);
 
+
+            // testeeeeee
             // Atualiza o produto com a nova URL
             Produto products = produtoRepository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
             products.setUrlImagem(imageUrl);
