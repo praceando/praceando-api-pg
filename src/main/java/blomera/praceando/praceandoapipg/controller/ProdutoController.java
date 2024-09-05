@@ -5,9 +5,9 @@
  * Creation Date: 29/08/2024
  * Last Updated: 29/08/2024
  */
-package blomera.praceando.praceandoapipg.controllers;
+package blomera.praceando.praceandoapipg.controller;
 
-import blomera.praceando.praceandoapipg.models.Produto;
+import blomera.praceando.praceandoapipg.model.Produto;
 import blomera.praceando.praceandoapipg.repository.ProdutoRepository;
 import blomera.praceando.praceandoapipg.services.FirebaseStorageService;
 import org.springframework.beans.factory.annotation.Autowired;

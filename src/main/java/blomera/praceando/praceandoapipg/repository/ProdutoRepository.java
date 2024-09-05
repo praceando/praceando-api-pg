@@ -7,7 +7,7 @@
  */
 package blomera.praceando.praceandoapipg.repository;
 
-import blomera.praceando.praceandoapipg.models.Produto;
+import blomera.praceando.praceandoapipg.model.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {

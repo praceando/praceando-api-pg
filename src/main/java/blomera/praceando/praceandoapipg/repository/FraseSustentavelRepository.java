@@ -8,7 +8,7 @@
 
 package blomera.praceando.praceandoapipg.repository;
 
-import blomera.praceando.praceandoapipg.models.FraseSustentavel;
+import blomera.praceando.praceandoapipg.model.FraseSustentavel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FraseSustentavelRepository extends JpaRepository<FraseSustentavel, Long> {
