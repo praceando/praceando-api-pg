@@ -5,7 +5,7 @@
  * Creation Date: 27/08/2024
  * Last Updated: 27/08/2024
  */
-package blomera.praceando.praceandoapipg.models;
+package blomera.praceando.praceandoapipg.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
