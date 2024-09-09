@@ -9,7 +9,7 @@ package blomera.praceando.praceandoapipg.controller;
 
 import blomera.praceando.praceandoapipg.model.Produto;
 import blomera.praceando.praceandoapipg.repository.ProdutoRepository;
-import blomera.praceando.praceandoapipg.services.FirebaseStorageService;
+import blomera.praceando.praceandoapipg.service.FirebaseStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

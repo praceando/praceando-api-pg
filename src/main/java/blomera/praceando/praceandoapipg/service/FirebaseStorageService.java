@@ -5,11 +5,10 @@
  * Creation Date: 29/08/2024
  * Last Updated: 29/08/2024
  */
-package blomera.praceando.praceandoapipg.services;
+package blomera.praceando.praceandoapipg.service;
 
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
-import com.google.cloud.storage.Storage;
 import com.google.firebase.cloud.StorageClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
