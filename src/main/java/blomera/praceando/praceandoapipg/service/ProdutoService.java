@@ -7,6 +7,7 @@
  */
 package blomera.praceando.praceandoapipg.service;
 
+import blomera.praceando.praceandoapipg.model.Anunciante;
 import blomera.praceando.praceandoapipg.model.Produto;
 import blomera.praceando.praceandoapipg.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
@@ -71,17 +72,21 @@ public class ProdutoService {
     }
 
     /**
-     * Atualiza o avatar do usuário ao comprar um produto.
-     * @param productId do produto comprado.
-     * @param userId Id do usuário que comprou o produto.
-     * @return true se a atualização foi bem-sucedida.
+     * Atualiza os dados de um produto.
+     * @param id Id do produto a ser atualizado.
+     * @param produto Produto com os novos dados.
+     * @return produto atualizado, retorna null se o produto não existir
      */
-    public boolean updateUserAvatar(Long productId, Long userId) {
-        Produto product = getProdutoById(productId);
-        if (product != null) {
-            // Lógica para associar o avatar ao usuário KKKKKKKKKKKKK
-            return true;
+    public Produto updateProduto(Long id, Produto produto) {
+        Produto existingProduto = getProdutoById(id);
+        if (existingProduto != null) {
+            existingProduto.setQtEstoque(produto.getQtEstoque());
+            existingProduto.setNmProduto(produto.getNmProduto());
+            existingProduto.setDsProduto(produto.getDsProduto());
+            existingProduto.setVlPreco(produto.getVlPreco());
+            existingProduto.setVlPreco(produto.getVlPreco());
+            return produtoRepository.save(existingProduto);
         }
-        return false;
+        return null;
     }
 }
