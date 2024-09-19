@@ -13,5 +13,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface EventoTagRepository extends JpaRepository<EventoTag, Long> {
-    List<EventoTag> findEventoTagsByTag_IdOrderById();
+    List<EventoTag> findEventoTagsByTag_IdOrderById(Long anuncianteId);
 }

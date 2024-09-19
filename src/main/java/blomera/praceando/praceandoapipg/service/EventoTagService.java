@@ -44,7 +44,7 @@ public class EventoTagService {
      * @return lista de EventoTag por id da tag, ordenada por id.
      */
     public List<EventoTag> getEventoTagsByTagId(Long tagId) {
-        return eventoTagRepository.findEventoTagsByTag_IdOrderById();
+        return eventoTagRepository.findEventoTagsByTag_IdOrderById(tagId);
     }
 
     /**

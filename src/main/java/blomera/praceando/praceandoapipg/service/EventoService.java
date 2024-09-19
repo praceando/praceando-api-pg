@@ -12,6 +12,7 @@ import blomera.praceando.praceandoapipg.model.Evento;
 import blomera.praceando.praceandoapipg.repository.EventoRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,14 +45,16 @@ public class EventoService {
      * @return lista de eventos por anunciante.
      */
     public List<Evento> getEventosByAnuncianteId(Long anuncianteId) {
-        return eventoRepository.findEventoByAnunciante_IdOrderById();
+        return eventoRepository.findEventosByAnunciante_IdOrderById(anuncianteId);
     }
 
     /**
+     * @param dtFim Id do evento a ser atualizado.
+     * @param dtInicio Evento com os novos dados.
      * @return lista de eventos com base na data de início e fim.
      */
-    public List<Evento> getEventosByDataInicioAndFim() {
-        return eventoRepository.findEventoByDtFimAndDtInicioOrderById();
+    public List<Evento> getEventosByDataInicioAndFim(LocalDateTime dtFim, LocalDateTime dtInicio) {
+        return eventoRepository.findEventosByDtFimAndDtInicioOrderById(dtFim, dtInicio);
     }
 
     /**

@@ -7,8 +7,8 @@
  */
 package blomera.praceando.praceandoapipg.repository;
 
-import blomera.praceando.praceandoapipg.model.Interesse;
+import blomera.praceando.praceandoapipg.model.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LocalRepository extends JpaRepository<Interesse, Long> {
+public interface LocalRepository extends JpaRepository<Local, Long> {
 }

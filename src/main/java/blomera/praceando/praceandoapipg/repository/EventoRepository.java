@@ -10,10 +10,10 @@ package blomera.praceando.praceandoapipg.repository;
 import blomera.praceando.praceandoapipg.model.Evento;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventoRepository extends JpaRepository<Evento, Long> {
-    List<Evento> findEventoByAnunciante_IdOrderById();
-    List<Evento> findEventoByDtFimAndDtInicioOrderById();
-
+    List<Evento> findEventosByAnunciante_IdOrderById(Long anuncianteId);
+    List<Evento> findEventosByDtFimAndDtInicioOrderById(LocalDateTime dtFim, LocalDateTime dtInicio);
 }
