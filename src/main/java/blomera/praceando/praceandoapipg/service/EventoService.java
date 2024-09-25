@@ -3,26 +3,31 @@
  * Description: Service for the Evento entity
  * Author: Camilla Ucci de Menezes
  * Creation Date: 16/09/2024
- * Last Updated: 16/09/2024
+ * Last Updated: 23/09/2024
  */
 
 package blomera.praceando.praceandoapipg.service;
 
 import blomera.praceando.praceandoapipg.model.Evento;
+import blomera.praceando.praceandoapipg.model.EventoTag;
 import blomera.praceando.praceandoapipg.repository.EventoRepository;
+import blomera.praceando.praceandoapipg.repository.EventoTagRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EventoService {
 
     private final EventoRepository eventoRepository;
+    private final EventoTagRepository eventoTagRepository;
 
-    public EventoService(EventoRepository eventoRepository) {
+    public EventoService(EventoRepository eventoRepository, EventoTagRepository eventoTagRepository) {
         this.eventoRepository = eventoRepository;
+        this.eventoTagRepository = eventoTagRepository;
     }
 
     /**
@@ -44,7 +49,7 @@ public class EventoService {
     /**
      * @return lista de eventos por anunciante.
      */
-    public List<Evento> getEventosByAnuncianteId(Long anuncianteId) {
+    public List<Evento> findEventosByAnunciante(Long anuncianteId) {
         return eventoRepository.findEventosByAnunciante_IdOrderById(anuncianteId);
     }
 
@@ -53,7 +58,7 @@ public class EventoService {
      * @param dtInicio Evento com os novos dados.
      * @return lista de eventos com base na data de início e fim.
      */
-    public List<Evento> getEventosByDataInicioAndFim(LocalDateTime dtFim, LocalDateTime dtInicio) {
+    public List<Evento> findEventosByDateRange(LocalDateTime dtInicio, LocalDateTime dtFim) {
         return eventoRepository.findEventosByDtFimAndDtInicioOrderById(dtFim, dtInicio);
     }
 
@@ -94,5 +99,15 @@ public class EventoService {
             return eventoRepository.save(existingEvento);
         }
         return null;
+    }
+
+    /**
+     * @return lista de eventos por tag.
+     */
+    public List<Evento> findEventosByTag(Long tagId) {
+        List<EventoTag> eventoTags = eventoTagRepository.findEventoTagsByTag_IdOrderById(tagId);
+        return eventoTags.stream()
+                .map(EventoTag::getEvento)
+                .collect(Collectors.toList());
     }
 }

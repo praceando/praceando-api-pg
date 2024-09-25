@@ -2,8 +2,8 @@
  * Class: AnuncianteController
  * Description: Controller for the Anunciante entity.
  * Author: Camilla Ucci de Menezes
- * Creation Date: 18/09/2024
- * Last Updated: 18/09/2024
+ * Creation Date: 24/09/2024
+ * Last Updated: 24/09/2024
  */
 package blomera.praceando.praceandoapipg.controller;
 
@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/postgres/anunciantes")
+@RequestMapping("/api/anunciante")
+@Tag(name = "Anunciante", description = "Gerenciar anunciantes")
 public class AnuncianteController {
-
     private final AnuncianteService anuncianteService;
 
     @Autowired

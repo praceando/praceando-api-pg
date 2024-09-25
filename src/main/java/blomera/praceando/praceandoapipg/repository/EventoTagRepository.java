@@ -3,7 +3,7 @@
  * Description: Repository for the EventoTag entity
  * Author: Camilla Ucci de Menezes
  * Creation Date: 06/09/2024
- * Last Updated: 06/09/2024
+ * Last Updated: 23/09/2024
  */
 package blomera.praceando.praceandoapipg.repository;
 
@@ -13,5 +13,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface EventoTagRepository extends JpaRepository<EventoTag, Long> {
-    List<EventoTag> findEventoTagsByTag_IdOrderById(Long anuncianteId);
+    List<EventoTag> findEventoTagsByTag_IdOrderById(Long tagId);
 }

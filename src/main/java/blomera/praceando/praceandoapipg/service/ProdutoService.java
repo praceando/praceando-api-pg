@@ -80,6 +80,7 @@ public class ProdutoService {
     public Produto updateProduto(Long id, Produto produto) {
         Produto existingProduto = getProdutoById(id);
         if (existingProduto != null) {
+            existingProduto.setUrlImagem(produto.getUrlImagem());
             existingProduto.setQtEstoque(produto.getQtEstoque());
             existingProduto.setNmProduto(produto.getNmProduto());
             existingProduto.setDsProduto(produto.getDsProduto());
