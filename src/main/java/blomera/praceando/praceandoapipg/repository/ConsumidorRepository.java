@@ -11,4 +11,5 @@ import blomera.praceando.praceandoapipg.model.Consumidor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ConsumidorRepository extends JpaRepository<Consumidor, Long> {
+    boolean existsByNmNickname(String nmNickname);
 }

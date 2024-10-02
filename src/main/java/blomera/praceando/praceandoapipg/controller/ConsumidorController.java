@@ -3,7 +3,7 @@
  * Description: Controller for the Consumidor entity.
  * Author: Camilla Ucci de Menezes
  * Creation Date: 24/09/2024
- * Last Updated: 24/09/2024
+ * Last Updated: 01/10/2024
  */
 package blomera.praceando.praceandoapipg.controller;
 
@@ -76,6 +76,22 @@ public class ConsumidorController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Consumidor não encontrado.");
         }
     }
+
+    @GetMapping("/existsByNickname/{nickname}")
+    @Operation(summary = "Verifica se o nickname já está em uso", description = "Retorna um booleano indicando se o nickname já existe")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Verificação realizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Consumidor não encontrado com esse nickname")
+    })
+    public ResponseEntity<?> verificarNickname(@Parameter(description = "Nickname do consumidor a ser verificado") @PathVariable String nickname) {
+        boolean existe = consumidorService.existsByNickname(nickname);
+        if (existe) {
+            return ResponseEntity.ok("O nickname já está em uso.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("O nickname está disponível.");
+        }
+    }
+
 
     @DeleteMapping("/delete/{id}")
     @Operation(summary = "Exclui um consumidor pelo ID", description = "Remove um consumidor pelo seu ID")

@@ -3,15 +3,15 @@
  * Description: Service for the Usuario entity
  * Author: Camilla Ucci de Menezes
  * Creation Date: 09/09/2024
- * Last Updated: 09/09/2024
+ * Last Updated: 01/10/2024
  */
 package blomera.praceando.praceandoapipg.service;
 
-import blomera.praceando.praceandoapipg.model.Anunciante;
 import blomera.praceando.praceandoapipg.model.Produto;
 import blomera.praceando.praceandoapipg.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,5 +89,18 @@ public class ProdutoService {
             return produtoRepository.save(existingProduto);
         }
         return null;
+    }
+
+    /**
+     * @return produto excluido.
+     */
+    public Optional<Produto> softDelete(Long id) {
+        Optional<Produto> produto = produtoRepository.findById(id);
+        if (produto.isPresent()) {
+            Produto p = produto.get();
+            p.setDtDesativacao(LocalDateTime.now());
+            produtoRepository.save(p);
+        }
+        return produto;
     }
 }

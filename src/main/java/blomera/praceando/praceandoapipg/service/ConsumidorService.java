@@ -72,4 +72,12 @@ public class ConsumidorService {
         }
         return null;
     }
+
+    /**
+     * @return boolean representando a existência ou não do nickname
+     */
+    public boolean existsByNickname(String nickname) {
+        return consumidorRepository.existsByNmNickname(nickname);
+    }
+
 }

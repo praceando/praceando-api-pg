@@ -3,7 +3,7 @@
  * Description: Model for the Usuario entity.
  * Author: Camilla Ucci de Menezes
  * Creation Date: 30/08/2024
- * Last Updated: 30/08/2024
+ * Last Updated: 30/09/2024
  */
 package blomera.praceando.praceandoapipg.model;
 
@@ -71,4 +71,9 @@ public class Usuario {
     @Column(name = "dt_atualizacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_DATE")
     @Schema(description = "Data e hora da última atualização do usuário.", example = "2024-08-27T10:00:00")
     private LocalDateTime dtAtualizacao;
+
+    @ManyToOne
+    @JoinColumn(name = "cd_acesso", referencedColumnName = "id_acesso")
+    @Schema(description = "Acessos do usuário.", example = "2")
+    private Acesso acesso;
 }

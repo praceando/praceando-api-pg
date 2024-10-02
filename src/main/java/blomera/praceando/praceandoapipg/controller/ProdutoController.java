@@ -3,14 +3,13 @@
  * Description: Controller for the Product entity.
  * Author: Camilla Ucci de Menezes
  * Creation Date: 29/08/2024
- * Last Updated: 29/08/2024
+ * Last Updated: 01/10/2024
  */
 package blomera.praceando.praceandoapipg.controller;
 
 import blomera.praceando.praceandoapipg.model.Produto;
-import blomera.praceando.praceandoapipg.repository.ProdutoRepository;
+import blomera.praceando.praceandoapipg.model.Usuario;
 import blomera.praceando.praceandoapipg.service.ProdutoService;
-import blomera.praceando.praceandoapipg.service.FirebaseStorageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,13 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 @Tag(name = "Produto", description = "Gerenciar produtos")
 public class ProdutoController {
 
@@ -96,6 +94,17 @@ public class ProdutoController {
             return ResponseEntity.ok("Produto excluído com sucesso.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
+        }
+    }
+
+    @PatchMapping("/soft-delete/{id}")
+    @Operation(summary = "Desativa um produto ao invés de removê-lo.")
+    public ResponseEntity<String> softDeleteProduto(@PathVariable Long id) {
+        Optional<Produto> produto = produtoService.softDelete(id);
+        if (produto.isPresent()) {
+            return ResponseEntity.ok("Produto desativado com sucesso.");
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 

@@ -65,7 +65,7 @@ public class GeneroService {
     public Genero updateGenero(Long id, Genero genero) {
         Genero existingGenero = getGeneroById(id);
         if (existingGenero != null) {
-            existingGenero.setDsNome(genero.getDsNome());
+            existingGenero.setDsGenero(genero.getDsGenero());
             existingGenero.setDtAtualizacao(genero.getDtAtualizacao());
             return generoRepository.save(existingGenero);
         }

@@ -3,7 +3,7 @@
  * Description: Service for the Usuario entity.
  * Author: Camilla Ucci de Menezes
  * Creation Date: 18/09/2024
- * Last Updated: 18/09/2024
+ * Last Updated: 30/09/2024
  */
 
 package blomera.praceando.praceandoapipg.service;
@@ -12,6 +12,7 @@ import blomera.praceando.praceandoapipg.model.Usuario;
 import blomera.praceando.praceandoapipg.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,4 +78,18 @@ public class UsuarioService {
         }
         return null;
     }
+
+    /**
+     * @return usuário excluido.
+     */
+    public Optional<Usuario> softDelete(Long id) {
+        Optional<Usuario> usuario = usuarioRepository.findById(id);
+        if (usuario.isPresent()) {
+            Usuario u = usuario.get();
+            u.setDtDesativacao(LocalDateTime.now());
+            usuarioRepository.save(u);
+        }
+        return usuario;
+    }
 }
+
