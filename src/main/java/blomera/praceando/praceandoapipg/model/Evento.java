@@ -12,7 +12,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -44,12 +46,20 @@ public class Evento {
     private String dsEvento;
 
     @Column(name = "dt_inicio")
-    @Schema(description = "Data e hora de início do evento.", example = "2024-09-01T09:00:00")
-    private LocalDateTime dtInicio;
+    @Schema(description = "Data de início do evento.", example = "2024-09-01")
+    private LocalDate dtInicio;
+
+    @Column(name = "hr_inicio")
+    @Schema(description = "Hora de início do evento.", example = "18:00:00")
+    private LocalTime hrInicio;
 
     @Column(name = "dt_fim")
-    @Schema(description = "Data e hora de término do evento.", example = "2024-09-01T18:00:00")
-    private LocalDateTime dtFim;
+    @Schema(description = "Data de término do evento.", example = "2024-09-02")
+    private LocalDate dtFim;
+
+    @Column(name = "hr_fim")
+    @Schema(description = "Hora de término do evento.", example = "20:00:00")
+    private LocalTime hrFim;
 
     @Column(name = "url_documentacao", columnDefinition = "TEXT")
     @Schema(description = "URL com documentação adicional sobre o evento.", example = "https://www.exemplo.com/documentacao")

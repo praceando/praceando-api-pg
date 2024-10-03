@@ -3,7 +3,7 @@
  * Description: Model for the Usuario entity.
  * Author: Camilla Ucci de Menezes
  * Creation Date: 30/08/2024
- * Last Updated: 30/08/2024
+ * Last Updated: 02/10/2024
  */
 package blomera.praceando.praceandoapipg.model;
 
@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -43,14 +45,23 @@ public class Usuario {
 
     @NotBlank(message = "O nome do usuário ('nm_usuario') não pode estar vazio.")
     @Column(name = "nm_usuario", length = 255)
-    @Schema(description = "Nome do usuário.", example = "João Silva")
+    @Schema(description = "Nome do usuário.", example = "Camilla Ucci")
     private String nmUsuario;
 
     @Email(message = "O e-mail ('ds_email') deve ser um e-mail válido.")
     @NotBlank(message = "O e-mail ('ds_email') não pode estar vazio.")
     @Column(name = "ds_email", length = 255)
-    @Schema(description = "E-mail do usuário.", example = "joao.silva@example.com")
+    @Schema(description = "E-mail do usuário.", example = "camis.linda@example.com")
     private String dsEmail;
+
+    @Size(min = 8, message = "A senha ('ds_senha') deve ter pelo menos 8 caracteres.")
+    @NotBlank(message = "A senha ('ds_senha') não pode estar vazia.")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).+$",
+            message = "A senha ('ds_senha') deve conter pelo menos um número e um caractere especial.")
+    @Column(name = "ds_senha", length = 255)
+    @Schema(description = "Senha do usuário.", example = "Senha123@")
+    private String dsSenha;
+
 
     @Column(name = "is_premium")
     @Schema(description = "Indica se o usuário é um assinante premium.", example = "true")
@@ -71,4 +82,9 @@ public class Usuario {
     @Column(name = "dt_atualizacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_DATE")
     @Schema(description = "Data e hora da última atualização do usuário.", example = "2024-08-27T10:00:00")
     private LocalDateTime dtAtualizacao;
+
+    @ManyToOne
+    @JoinColumn(name = "cd_acesso", referencedColumnName = "id_acesso")
+    @Schema(description = "Acessos do usuário.", example = "2")
+    private Acesso acesso;
 }

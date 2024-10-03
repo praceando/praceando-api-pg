@@ -34,9 +34,9 @@ public class Genero {
 
     @NotNull(message = "O campo 'nome' (nome do gênero) não pode ser nulo.")
     @Size(min = 3, max = 255, message = "O nome do gênero ('nome') deve ter pelo menos 3 caracteres e no máximo 255.")
-    @Column(name = "ds_nome")
+    @Column(name = "ds_genero")
     @Schema(description = "Nome do gênero.", example = "Feminino")
-    private String dsNome;
+    private String dsGenero;
 
     @NotNull(message = "O campo 'dt_atualizacao' (data de atualização) não pode ser nulo.")
     @Past(message = "A data de atualização ('dt_atualizacao') deve estar no passado.")

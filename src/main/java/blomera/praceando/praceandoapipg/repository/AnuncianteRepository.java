@@ -8,8 +8,9 @@
 
 package blomera.praceando.praceandoapipg.repository;
 
-import blomera.praceando.praceandoapipg.model.FraseSustentavel;
+import blomera.praceando.praceandoapipg.model.Anunciante;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AnuncianteRepository extends JpaRepository<FraseSustentavel, Long> {
+public interface AnuncianteRepository extends JpaRepository<Anunciante, Long> {
+
 }
