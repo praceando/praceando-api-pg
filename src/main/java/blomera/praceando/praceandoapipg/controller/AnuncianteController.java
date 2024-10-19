@@ -55,7 +55,7 @@ public class AnuncianteController {
     })
     public ResponseEntity<?> inserirAnunciante(@RequestBody Anunciante anunciante) {
         try {
-            Anunciante novoAnunciante = anuncianteService.saveAnunciante(anunciante);
+            Anunciante novoAnunciante = anuncianteService.validateAndPersistAnunciante(anunciante);
             return ResponseEntity.status(HttpStatus.CREATED).body(novoAnunciante);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao inserir anunciante.");

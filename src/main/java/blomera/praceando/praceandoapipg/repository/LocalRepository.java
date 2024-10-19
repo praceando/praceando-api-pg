@@ -21,6 +21,6 @@ public interface LocalRepository extends JpaRepository<Local, Long> {
     List<Local> findAll();
 
     @Override
-    @Query(value = "SELECT * FROM local l WHERE l.dt_desativacao IS NULL AND p.id_local = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM local l WHERE l.dt_desativacao IS NULL AND l.id_local = :id", nativeQuery = true)
     Optional<Local> findById(@Param("id") Long id);
 }
