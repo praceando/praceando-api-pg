@@ -9,9 +9,14 @@
 package blomera.praceando.praceandoapipg.service;
 
 import blomera.praceando.praceandoapipg.model.Anunciante;
+import blomera.praceando.praceandoapipg.model.Usuario;
 import blomera.praceando.praceandoapipg.repository.AnuncianteRepository;
+import blomera.praceando.praceandoapipg.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,9 +24,11 @@ import java.util.Optional;
 public class AnuncianteService {
 
     private final AnuncianteRepository anuncianteRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public AnuncianteService(AnuncianteRepository anuncianteRepository) {
+    public AnuncianteService(AnuncianteRepository anuncianteRepository, UsuarioRepository usuarioRepository) {
         this.anuncianteRepository = anuncianteRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     /**
@@ -53,6 +60,10 @@ public class AnuncianteService {
      * @return anunciante inserido.
      */
     public Anunciante saveAnunciante(Anunciante anunciante) {
+        anunciante.setDsSenha(new BCryptPasswordEncoder().encode(anunciante.getDsSenha()));
+        anunciante.setDtCriacao(LocalDateTime.now());
+        anunciante.setDtAtualizacao(LocalDateTime.now());
+
         return anuncianteRepository.save(anunciante);
     }
 
@@ -65,10 +76,21 @@ public class AnuncianteService {
     public Anunciante updateAnunciante(Long id, Anunciante anunciante) {
         Anunciante existingAnunciante = getAnuncianteById(id);
         if (existingAnunciante != null) {
+            existingAnunciante.setAcesso(anunciante.getAcesso());
+            existingAnunciante.setCdInventarioAvatar(anunciante.getCdInventarioAvatar());
+            existingAnunciante.setGenero(anunciante.getGenero());
+            existingAnunciante.setCdTipoUsuario(anunciante.getCdTipoUsuario());
+            existingAnunciante.setNmUsuario(anunciante.getNmUsuario());
+            existingAnunciante.setDsEmail(anunciante.getDsEmail());
+            existingAnunciante.setDsSenha(new BCryptPasswordEncoder().encode(anunciante.getDsSenha()));
+            existingAnunciante.setIsPremium(anunciante.getIsPremium());
+            existingAnunciante.setDsUsuario(anunciante.getDsUsuario());
+            existingAnunciante.setDtCriacao(LocalDateTime.now());
+            existingAnunciante.setDtAtualizacao(LocalDateTime.now());
+            existingAnunciante.setDtNascimento(anunciante.getDtNascimento());
             existingAnunciante.setNmEmpresa(anunciante.getNmEmpresa());
             existingAnunciante.setNrCnpj(anunciante.getNrCnpj());
             existingAnunciante.setNrTelefone(anunciante.getNrTelefone());
-            existingAnunciante.setDtNascimento(anunciante.getDtNascimento());
             return anuncianteRepository.save(existingAnunciante);
         }
         return null;

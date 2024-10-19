@@ -22,16 +22,11 @@ import java.time.LocalDateTime;
 @Entity(name = "interesse")
 @Schema(description = "Representa o interesse de um consumidor em um evento no sistema Praceando.")
 public class Interesse {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_interesse")
     @Schema(description = "Identificador único do interesse.", example = "1")
     private long id;
-
-    @Column(name = "dt_atualizacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_DATE")
-    @Schema(description = "Data e hora da última atualização do interesse.", example = "2024-08-18T10:00:00")
-    private LocalDateTime dtAtualizacao;
 
     @ManyToOne
     @JoinColumn(name = "cd_consumidor", referencedColumnName = "id_usuario")
@@ -42,4 +37,8 @@ public class Interesse {
     @JoinColumn(name = "cd_evento", referencedColumnName = "id_evento")
     @Schema(description = "Evento em que o usuário demonstrou interesse.")
     private Evento evento;
+
+    @Column(name = "dt_atualizacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_DATE")
+    @Schema(description = "Data e hora da última atualização do interesse.", example = "2024-08-18T10:00:00")
+    private LocalDateTime dtAtualizacao;
 }

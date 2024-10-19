@@ -3,7 +3,7 @@
  * Description: Model for the Local entity.
  * Author: Camilla Ucci de Menezes
  * Creation Date: 26/08/2024
- * Last Updated: 30/08/2024
+ * Last Updated: 10/10/2024
  */
 package blomera.praceando.praceandoapipg.model;
 
@@ -16,6 +16,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,7 +27,6 @@ import java.time.LocalDateTime;
 @Entity(name = "local")
 @Schema(description = "Representa um local utilizado no sistema Praceando.")
 public class Local {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_local")
@@ -47,6 +47,18 @@ public class Local {
     @Column(name = "nr_long", precision = 10, scale = 6)
     @Schema(description = "Longitude do local com precisão de até 10 cm.", example = "-122.419418")
     private BigDecimal nrLong;
+
+    @Column(name = "hr_abertura")
+    @Schema(description = "Hora de abertura da praça.", example = "18:00:00")
+    private LocalTime hrAbertura;
+
+    @Column(name = "hr_fechamento")
+    @Schema(description = "Hora de fechamento da praça.", example = "20:00:00")
+    private LocalTime hrFechamento;
+
+    @Column(name = "dt_desativacao")
+    @Schema(description = "Data e hora da desativação do usuário.", example = "2024-08-31T15:30:00")
+    private LocalDateTime dtDesativacao;
 
     @Past(message = "A data de atualização ('dt_atualizacao') deve estar no passado.")
     @Column(name = "dt_atualizacao")

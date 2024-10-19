@@ -3,7 +3,7 @@
  * Description: Model for the Consumidor entity, (inherits from Usuario).
  * Author: Camilla Ucci de Menezes
  * Creation Date: 30/08/2024
- * Last Updated: 30/08/2024
+ * Last Updated: 10/10/2024
  */
 package blomera.praceando.praceandoapipg.model;
 
@@ -21,9 +21,9 @@ import java.time.LocalDate;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity(name = "consumidor")
+@PrimaryKeyJoinColumn(name = "id_consumidor")
 @Schema(description = "Representa um consumidor, que herda de usuário no sistema Praceando.")
 public class Consumidor extends Usuario {
-
     @Past(message = "A data de nascimento ('dt_nascimento') deve ser no passado.")
     @Column(name = "dt_nascimento", nullable = false)
     @Schema(description = "Data de nascimento do consumidor.", example = "2000-01-15")

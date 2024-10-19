@@ -69,14 +69,17 @@ public class UsuarioService {
     public Usuario updateUsuario(Long id, Usuario user) {
         Usuario existingUsuario = getUsuarioById(id);
         if (existingUsuario != null) {
-            existingUsuario.setNmUsuario(user.getNmUsuario());
+            existingUsuario.setAcesso(user.getAcesso());
             existingUsuario.setCdInventarioAvatar(user.getCdInventarioAvatar());
             existingUsuario.setGenero(user.getGenero());
+            existingUsuario.setCdTipoUsuario(user.getCdTipoUsuario());
+            existingUsuario.setNmUsuario(user.getNmUsuario());
             existingUsuario.setDsEmail(user.getDsEmail());
+            existingUsuario.setDsSenha(new BCryptPasswordEncoder().encode(user.getDsSenha()));
             existingUsuario.setIsPremium(user.getIsPremium());
             existingUsuario.setDsUsuario(user.getDsUsuario());
-            existingUsuario.setDtAtualizacao(user.getDtAtualizacao());
-            existingUsuario.setDtDesativacao(user.getDtDesativacao());
+            existingUsuario.setDtCriacao(LocalDateTime.now());
+            existingUsuario.setDtAtualizacao(LocalDateTime.now());
             return usuarioRepository.save(existingUsuario);
         }
         return null;

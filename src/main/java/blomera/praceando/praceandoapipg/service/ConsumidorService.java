@@ -8,10 +8,15 @@
 
 package blomera.praceando.praceandoapipg.service;
 
+import blomera.praceando.praceandoapipg.model.Anunciante;
 import blomera.praceando.praceandoapipg.model.Consumidor;
+import blomera.praceando.praceandoapipg.model.Usuario;
 import blomera.praceando.praceandoapipg.repository.ConsumidorRepository;
+import blomera.praceando.praceandoapipg.repository.UsuarioRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,9 +24,12 @@ import java.util.Optional;
 public class ConsumidorService {
 
     private final ConsumidorRepository consumidorRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public ConsumidorService(ConsumidorRepository consumidorRepository) {
+    public ConsumidorService(ConsumidorRepository consumidorRepository, UsuarioRepository usuarioRepository) {
         this.consumidorRepository = consumidorRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     /**
@@ -53,6 +61,10 @@ public class ConsumidorService {
      * @return consumidor inserido.
      */
     public Consumidor saveConsumidor(Consumidor consumidor) {
+        consumidor.setDsSenha(new BCryptPasswordEncoder().encode(consumidor.getDsSenha()));
+        consumidor.setDtCriacao(LocalDateTime.now());
+        consumidor.setDtAtualizacao(LocalDateTime.now());
+
         return consumidorRepository.save(consumidor);
     }
 
@@ -65,9 +77,21 @@ public class ConsumidorService {
     public Consumidor updateConsumidor(Long id, Consumidor consumidor) {
         Consumidor existingConsumidor = getConsumidorById(id);
         if (existingConsumidor != null) {
+            existingConsumidor.setAcesso(consumidor.getAcesso());
+            existingConsumidor.setCdInventarioAvatar(consumidor.getCdInventarioAvatar());
+            existingConsumidor.setGenero(consumidor.getGenero());
+            existingConsumidor.setCdTipoUsuario(consumidor.getCdTipoUsuario());
+            existingConsumidor.setNmUsuario(consumidor.getNmUsuario());
+            existingConsumidor.setDsEmail(consumidor.getDsEmail());
+            existingConsumidor.setDsSenha(new BCryptPasswordEncoder().encode(consumidor.getDsSenha()));
+            existingConsumidor.setIsPremium(consumidor.getIsPremium());
+            existingConsumidor.setDsUsuario(consumidor.getDsUsuario());
+            existingConsumidor.setDtCriacao(LocalDateTime.now());
             existingConsumidor.setDtNascimento(consumidor.getDtNascimento());
             existingConsumidor.setNmNickname(consumidor.getNmNickname());
             existingConsumidor.setNrPolen(consumidor.getNrPolen());
+            existingConsumidor.setDtAtualizacao(LocalDateTime.now());
+
             return consumidorRepository.save(existingConsumidor);
         }
         return null;

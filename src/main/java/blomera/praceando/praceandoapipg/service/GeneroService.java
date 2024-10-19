@@ -12,6 +12,7 @@ import blomera.praceando.praceandoapipg.model.Genero;
 import blomera.praceando.praceandoapipg.repository.GeneroRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,7 +67,7 @@ public class GeneroService {
         Genero existingGenero = getGeneroById(id);
         if (existingGenero != null) {
             existingGenero.setDsGenero(genero.getDsGenero());
-            existingGenero.setDtAtualizacao(genero.getDtAtualizacao());
+            existingGenero.setDtAtualizacao(LocalDateTime.now());
             return generoRepository.save(existingGenero);
         }
         return null;

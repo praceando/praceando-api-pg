@@ -25,7 +25,6 @@ import java.time.LocalDateTime;
 @Entity(name = "genero")
 @Schema(description = "Representa o gênero utilizado no sistema Praceando.")
 public class Genero {
-
     @Id
     @Column(name = "id_genero")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

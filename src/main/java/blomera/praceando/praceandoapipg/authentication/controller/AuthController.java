@@ -1,4 +1,3 @@
-
 package blomera.praceando.praceandoapipg.authentication.controller;
 
 import blomera.praceando.praceandoapipg.authentication.model.LoginRequest;
@@ -13,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +27,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Autenticação", description = "Gerenciar autenticação")
 public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     public final SecretKey secretKey;
@@ -67,11 +68,11 @@ public class AuthController {
 
                 return ResponseEntity.status(HttpStatus.OK).body(Map.of("token", "Bearer " + token));
             } catch (Exception e) {
-//                logger.error("Erro ao gerar o token JWT: ", e);
+                logger.error("Erro ao gerar o token JWT: ", e);
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao gerar o token JWT");
             }
         } else {
-//            logger.error("Credenciais inválidas para: {}", loginRequest.getUsername());
+            logger.error("Credenciais inválidas para: {}", loginRequest.getDsEmail());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas.");
         }
     }

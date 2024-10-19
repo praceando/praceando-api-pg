@@ -8,10 +8,12 @@
 
 package blomera.praceando.praceandoapipg.service;
 
+import blomera.praceando.praceandoapipg.model.Evento;
 import blomera.praceando.praceandoapipg.model.Local;
 import blomera.praceando.praceandoapipg.repository.LocalRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,9 +70,24 @@ public class LocalService {
             existingLocal.setNmLocal(local.getNmLocal());
             existingLocal.setNrLat(local.getNrLat());
             existingLocal.setNrLong(local.getNrLong());
-            existingLocal.setDtAtualizacao(local.getDtAtualizacao());
+            existingLocal.setHrAbertura(local.getHrAbertura());
+            existingLocal.setHrFechamento(local.getHrFechamento());
+            existingLocal.setDtAtualizacao(LocalDateTime.now());
             return localRepository.save(existingLocal);
         }
         return null;
+    }
+
+    /**
+     * @return local excluido.
+     */
+    public Optional<Local> softDelete(Long id) {
+        Optional<Local> local = localRepository.findById(id);
+        if (local.isPresent()) {
+            Local l = local.get();
+            l.setDtDesativacao(LocalDateTime.now());
+            localRepository.save(l);
+        }
+        return local;
     }
 }

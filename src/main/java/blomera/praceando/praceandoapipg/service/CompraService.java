@@ -12,6 +12,7 @@ import blomera.praceando.praceandoapipg.model.Compra;
 import blomera.praceando.praceandoapipg.repository.CompraRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,13 +66,13 @@ public class CompraService {
     public Compra updateCompra(Long id, Compra compra) {
         Compra existingCompra = getCompraById(id);
         if (existingCompra != null) {
+            existingCompra.setUsuario(compra.getUsuario());
+            existingCompra.setProdutos(compra.getProdutos());
+            existingCompra.setEvento(compra.getEvento());
             existingCompra.setDtCompra(compra.getDtCompra());
             existingCompra.setVlTotal(compra.getVlTotal());
             existingCompra.setDsStatus(compra.getDsStatus());
-            existingCompra.setDtAtualizacao(compra.getDtAtualizacao());
-            existingCompra.setUsuario(compra.getUsuario());
-            existingCompra.setProduto(compra.getProduto());
-            existingCompra.setEvento(compra.getEvento());
+            existingCompra.setDtAtualizacao(LocalDateTime.now());
             return compraRepository.save(existingCompra);
         }
         return null;

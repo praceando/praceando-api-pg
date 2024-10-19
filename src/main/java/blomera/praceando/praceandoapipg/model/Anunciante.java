@@ -3,7 +3,7 @@
  * Description: Model for the Anunciante entity, (inherits from Usuario).
  * Author: Camilla Ucci de Menezes
  * Creation Date: 30/08/2024
- * Last Updated: 30/08/2024
+ * Last Updated: 10/10/2024
  */
 package blomera.praceando.praceandoapipg.model;
 
@@ -24,9 +24,9 @@ import java.time.Period;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity(name = "anunciante")
+@PrimaryKeyJoinColumn(name = "id_anunciante")
 @Schema(description = "Representa um anunciante, que herda de usuário no sistema Praceando.")
 public class Anunciante extends Usuario {
-
     @Past(message = "A data de nascimento ('dt_nascimento') deve ser no passado.")
     @Column(name = "dt_nascimento", nullable = false)
     @Schema(description = "Data de nascimento do anunciante.", example = "1980-06-15")

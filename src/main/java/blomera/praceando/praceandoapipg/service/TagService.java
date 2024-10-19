@@ -12,6 +12,7 @@ import blomera.praceando.praceandoapipg.model.Tag;
 import blomera.praceando.praceandoapipg.repository.TagRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,7 +68,7 @@ public class TagService {
         if (existingTag != null) {
             existingTag.setNmTag(tag.getNmTag());
             existingTag.setDsCategoria(tag.getDsCategoria());
-            existingTag.setDtAtualizacao(tag.getDtAtualizacao());
+            existingTag.setDtAtualizacao(LocalDateTime.now());
             return tagRepository.save(existingTag);
         }
         return null;

@@ -12,6 +12,7 @@ import blomera.praceando.praceandoapipg.model.Interesse;
 import blomera.praceando.praceandoapipg.repository.InteresseRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,9 +66,9 @@ public class InteresseService {
     public Interesse updateInteresse(Long id, Interesse interesse) {
         Interesse existingInteresse = getInteresseById(id);
         if (existingInteresse != null) {
-            existingInteresse.setDtAtualizacao(interesse.getDtAtualizacao());
             existingInteresse.setConsumidor(interesse.getConsumidor());
             existingInteresse.setEvento(interesse.getEvento());
+            existingInteresse.setDtAtualizacao(LocalDateTime.now());
             return interesseRepository.save(existingInteresse);
         }
         return null;

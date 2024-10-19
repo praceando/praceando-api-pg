@@ -12,6 +12,7 @@ import blomera.praceando.praceandoapipg.model.Pagamento;
 import blomera.praceando.praceandoapipg.repository.PagamentoRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,9 +66,9 @@ public class PagamentoService {
     public Pagamento updatePagamento(Long id, Pagamento pagamento) {
         Pagamento existingPagamento = getPagamentoById(id);
         if (existingPagamento != null) {
-            existingPagamento.setDtPagamento(pagamento.getDtPagamento());
-            existingPagamento.setDtAtualizacao(pagamento.getDtAtualizacao());
             existingPagamento.setCompra(pagamento.getCompra());
+            existingPagamento.setDtPagamento(pagamento.getDtPagamento());
+            existingPagamento.setDtAtualizacao(LocalDateTime.now());
             return pagamentoRepository.save(existingPagamento);
         }
         return null;

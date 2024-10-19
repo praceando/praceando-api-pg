@@ -80,12 +80,13 @@ public class ProdutoService {
     public Produto updateProduto(Long id, Produto produto) {
         Produto existingProduto = getProdutoById(id);
         if (existingProduto != null) {
-            existingProduto.setUrlImagem(produto.getUrlImagem());
             existingProduto.setQtEstoque(produto.getQtEstoque());
             existingProduto.setNmProduto(produto.getNmProduto());
             existingProduto.setDsProduto(produto.getDsProduto());
             existingProduto.setVlPreco(produto.getVlPreco());
-            existingProduto.setVlPreco(produto.getVlPreco());
+            existingProduto.setUrlImagem(produto.getUrlImagem());
+            existingProduto.setNmCategoria(produto.getNmCategoria());
+            existingProduto.setDtAtualizacao(LocalDateTime.now());
             return produtoRepository.save(existingProduto);
         }
         return null;
