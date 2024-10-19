@@ -12,14 +12,12 @@ import blomera.praceando.praceandoapipg.model.Evento;
 import blomera.praceando.praceandoapipg.model.EventoTag;
 import blomera.praceando.praceandoapipg.repository.EventoRepository;
 import blomera.praceando.praceandoapipg.repository.EventoTagRepository;
+import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Service;
 
+import java.sql.CallableStatement;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -93,25 +91,25 @@ public class EventoService {
      * Método para inserir um evento junto com suas tags.
      */
     public void saveEvento(Evento evento, List<String> tags) {
-        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
-                .withProcedureName("PRC_INSERIR_EVENTO_TAGS");
-
         try {
             java.sql.Array tagsArray = jdbcTemplate.getDataSource().getConnection().createArrayOf("VARCHAR", tags.toArray());
 
-            MapSqlParameterSource params = new MapSqlParameterSource()
-                    .addValue("p_nm_evento", evento.getNmEvento(), Types.VARCHAR)
-                    .addValue("p_ds_evento", evento.getDsEvento(), Types.VARCHAR)
-                    .addValue("p_dt_inicio", java.sql.Date.valueOf(evento.getDtInicio()), Types.DATE)
-                    .addValue("p_hr_inicio", java.sql.Time.valueOf(evento.getHrInicio()), Types.TIME)
-                    .addValue("p_dt_fim", java.sql.Date.valueOf(evento.getDtFim()), Types.DATE)
-                    .addValue("p_hr_fim", java.sql.Time.valueOf(evento.getHrFim()), Types.TIME)
-                    .addValue("p_url_documentacao", evento.getUrlDocumentacao(), Types.VARCHAR)
-                    .addValue("p_cd_local", evento.getLocal().getId(), Types.INTEGER)
-                    .addValue("p_cd_anunciante", evento.getAnunciante().getId(), Types.INTEGER)
-                    .addValue("p_tags", tagsArray, Types.ARRAY);
-
-            jdbcCall.execute(params);
+            jdbcTemplate.execute((ConnectionCallback<Void>) con -> {
+                try (CallableStatement callableStatement = con.prepareCall("CALL PRC_INSERIR_EVENTO_TAGS(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                    callableStatement.setString(1, evento.getNmEvento());
+                    callableStatement.setString(2, evento.getDsEvento());
+                    callableStatement.setDate(3, java.sql.Date.valueOf(evento.getDtInicio()));
+                    callableStatement.setTime(4, java.sql.Time.valueOf(evento.getHrInicio()));
+                    callableStatement.setDate(5, java.sql.Date.valueOf(evento.getDtFim()));
+                    callableStatement.setTime(6, java.sql.Time.valueOf(evento.getHrFim()));
+                    callableStatement.setString(7, evento.getUrlDocumentacao());
+                    callableStatement.setInt(8, Long.valueOf(evento.getLocal().getId()).intValue());
+                    callableStatement.setInt(9, evento.getAnunciante().getId().intValue());
+                    callableStatement.setArray(10, tagsArray);
+                    callableStatement.execute();
+                    return null;
+                }
+            });
 
         } catch (SQLException e) {
             e.printStackTrace();

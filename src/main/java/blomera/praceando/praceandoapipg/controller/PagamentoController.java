@@ -111,4 +111,20 @@ public class PagamentoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar pagamento.");
         }
     }
+
+    @PostMapping("/complete-purchase/{cdCompra}")
+    @Operation(summary = "Completa uma compra", description = "Atualiza o status de uma compra e registra o pagamento.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Compra completada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro ao completar a compra"),
+            @ApiResponse(responseCode = "404", description = "Compra não encontrada")
+    })
+    public ResponseEntity<?> completarCompra(@PathVariable Long cdCompra) {
+        try {
+            pagamentoService.completePurchase(cdCompra);
+            return ResponseEntity.status(HttpStatus.OK).body("Compra completada com sucesso.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao completar compra: " + e.getMessage());
+        }
+    }
 }

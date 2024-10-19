@@ -9,13 +9,17 @@
 package blomera.praceando.praceandoapipg.service;
 
 import blomera.praceando.praceandoapipg.model.Anunciante;
-import blomera.praceando.praceandoapipg.model.Usuario;
 import blomera.praceando.praceandoapipg.repository.AnuncianteRepository;
 import blomera.praceando.praceandoapipg.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
+import org.springframework.jdbc.core.ConnectionCallback;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.CallableStatement;
+import java.sql.Types;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -25,10 +29,12 @@ public class AnuncianteService {
 
     private final AnuncianteRepository anuncianteRepository;
     private final UsuarioRepository usuarioRepository;
+    private final JdbcTemplate jdbcTemplate;
 
-    public AnuncianteService(AnuncianteRepository anuncianteRepository, UsuarioRepository usuarioRepository) {
+    public AnuncianteService(AnuncianteRepository anuncianteRepository, UsuarioRepository usuarioRepository, JdbcTemplate jdbcTemplate) {
         this.anuncianteRepository = anuncianteRepository;
         this.usuarioRepository = usuarioRepository;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     /**
@@ -94,5 +100,28 @@ public class AnuncianteService {
             return anuncianteRepository.save(existingAnunciante);
         }
         return null;
+    }
+
+    public int calculateAge(LocalDate dtNascimento) {
+        return jdbcTemplate.execute((ConnectionCallback<Integer>) con -> {
+            try (CallableStatement callableStatement = con.prepareCall("{ ? = CALL FNC_CALCULAR_IDADE(?) }")) {
+                callableStatement.registerOutParameter(1, Types.INTEGER);
+                callableStatement.setDate(2, java.sql.Date.valueOf(dtNascimento));
+
+                callableStatement.execute();
+
+                return callableStatement.getInt(1);
+            }
+        });
+    }
+
+    @Transactional
+    public Anunciante validateAndPersistAnunciante(Anunciante anunciante) {
+        int idade = calculateAge(anunciante.getDtNascimento());
+        if (idade < 18) {
+            throw new IllegalArgumentException("A idade do anunciante deve ser maior ou igual a 18 anos.");
+        }
+
+        return saveAnunciante(anunciante);
     }
 }

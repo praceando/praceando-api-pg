@@ -10,8 +10,11 @@ package blomera.praceando.praceandoapipg.service;
 
 import blomera.praceando.praceandoapipg.model.Pagamento;
 import blomera.praceando.praceandoapipg.repository.PagamentoRepository;
+import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.stereotype.Service;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.CallableStatement;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +23,11 @@ import java.util.Optional;
 public class PagamentoService {
 
     private final PagamentoRepository pagamentoRepository;
+    private final JdbcTemplate jdbcTemplate;
 
-    public PagamentoService(PagamentoRepository pagamentoRepository) {
+    public PagamentoService(PagamentoRepository pagamentoRepository, JdbcTemplate jdbcTemplate) {
         this.pagamentoRepository = pagamentoRepository;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     /**
@@ -72,5 +77,18 @@ public class PagamentoService {
             return pagamentoRepository.save(existingPagamento);
         }
         return null;
+    }
+
+    /**
+     * Método para inserir um pagamento e atualizar o status de uma compra.
+     */
+    public void completePurchase(Long cdCompra) {
+        jdbcTemplate.execute((ConnectionCallback<Void>) con -> {
+            try (CallableStatement callableStatement = con.prepareCall("CALL PRC_ATUALIZAR_STATUS_COMPRA(?)")) {
+                callableStatement.setInt(1, cdCompra.intValue());
+                callableStatement.execute();
+                return null;
+            }
+        });
     }
 }

@@ -27,7 +27,6 @@ import java.time.LocalDateTime;
 @Entity(name = "usuario")
 @Schema(description = "Representa um usuário do sistema Praceando.")
 public class Usuario {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")

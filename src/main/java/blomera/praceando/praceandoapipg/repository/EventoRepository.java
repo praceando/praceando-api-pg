@@ -26,6 +26,6 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
     List<Evento> findAll();
 
     @Override
-    @Query(value = "SELECT * FROM evento e WHERE e.dt_desativacao IS NULL AND p.id_evento = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM evento e WHERE e.dt_desativacao IS NULL AND e.id_evento = :id", nativeQuery = true)
     Optional<Evento> findById(@Param("id") Long id);
 }

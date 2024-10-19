@@ -66,7 +66,6 @@ public class EventoController {
         }
     }
 
-
     @GetMapping("/find/{id}")
     @Operation(summary = "Busca um evento pelo ID", description = "Retorna um evento pelo seu ID")
     @ApiResponses(value = {

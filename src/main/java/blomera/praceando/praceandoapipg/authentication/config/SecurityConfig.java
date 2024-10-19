@@ -31,19 +31,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/evento/find/**").permitAll()
+                        .requestMatchers("/api/compra/**").permitAll()
+                        .requestMatchers("/api/pagamento/**").permitAll()
                         .requestMatchers("/api/evento/**").permitAll()
                         .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/usuario/**", "/api/anunciante/**", "/api/consumidor/**").permitAll()
                         .requestMatchers("/api/acesso/**").permitAll()
                         .requestMatchers("/api/acesso/create", "/api/acesso/update", "/api/acesso/delete").hasRole("ADMIN")
-                        .requestMatchers("/api/compra/**").permitAll()
                         .requestMatchers("/api/fraseSustentavel/**").permitAll()
                         .requestMatchers("/api/genero/**").permitAll()
                         .requestMatchers("/api/genero/create", "/api/genero/update", "/api/genero/delete").hasRole("ADMIN")
                         .requestMatchers("/api/interesse/**").permitAll()
                         .requestMatchers("/api/local/**").permitAll()
                         .requestMatchers("/api/local/create", "/api/local/update", "/api/local/delete").hasRole("ADMIN")
-                        .requestMatchers("/api/pagamento/**").permitAll()
                         .requestMatchers("api/produto/**").permitAll()
                         .requestMatchers("/api/produto/create", "/api/produto/update", "/api/produto/delete").hasRole("ADMIN")
                         .requestMatchers("/api/tag/**").permitAll()
