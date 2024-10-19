@@ -25,7 +25,6 @@ import java.util.Set;
 @Entity(name = "tag")
 @Schema(description = "Representa uma tag utilizada no sistema Praceando.")
 public class Tag {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tag")

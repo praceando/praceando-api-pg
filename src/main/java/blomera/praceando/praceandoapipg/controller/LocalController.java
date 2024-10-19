@@ -7,6 +7,7 @@
  */
 package blomera.praceando.praceandoapipg.controller;
 
+import blomera.praceando.praceandoapipg.model.Evento;
 import blomera.praceando.praceandoapipg.model.Local;
 import blomera.praceando.praceandoapipg.service.LocalService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/local")
@@ -89,6 +91,17 @@ public class LocalController {
             return ResponseEntity.ok("Local excluído com sucesso.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Local não encontrado.");
+        }
+    }
+
+    @DeleteMapping("/soft-delete/{id}")
+    @Operation(summary = "Desativa um local ao invés de removê-lo.")
+    public ResponseEntity<String> softDeleteEvento(@PathVariable Long id) {
+        Optional<Local> local = localService.softDelete(id);
+        if (local.isPresent()) {
+            return ResponseEntity.ok("Local desativado com sucesso.");
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 

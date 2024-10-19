@@ -23,7 +23,6 @@ import java.time.LocalDateTime;
 @Entity(name = "acesso")
 @Schema(description = "Representa um acesso no sistema Praceando.")
 public class Acesso {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_acesso", nullable = false)

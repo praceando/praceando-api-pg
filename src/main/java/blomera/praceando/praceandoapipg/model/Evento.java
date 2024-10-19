@@ -32,6 +32,16 @@ public class Evento {
     @Schema(description = "Identificador único do evento.", example = "1")
     private long id;
 
+    @ManyToOne
+    @JoinColumn(name = "cd_local", referencedColumnName = "id_local")
+    @Schema(description = "Praça onde o evento será realizado.")
+    private Local local;
+
+    @ManyToOne
+    @JoinColumn(name = "cd_anunciante", referencedColumnName = "id_anunciante")
+    @Schema(description = "Anunciante responsável pelo evento.")
+    private Anunciante anunciante;
+
     @Column(name = "qt_interesse")
     @Schema(description = "Quantidade de pessoas interessadas no evento.", example = "350")
     private int qtInteresse;
@@ -65,17 +75,11 @@ public class Evento {
     @Schema(description = "URL com documentação adicional sobre o evento.", example = "https://www.exemplo.com/documentacao")
     private String urlDocumentacao;
 
+    @Column(name = "dt_desativacao")
+    @Schema(description = "Data e hora da desativação do evento.", example = "2024-08-31T15:30:00")
+    private LocalDateTime dtDesativacao;
+
     @Column(name = "dt_atualizacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_DATE")
     @Schema(description = "Data e hora da última atualização do evento.", example = "2024-08-18T10:00:00")
     private LocalDateTime dtAtualizacao;
-
-    @ManyToOne
-    @JoinColumn(name = "cd_local", referencedColumnName = "id_local")
-    @Schema(description = "Praça onde o evento será realizado.")
-    private Local local;
-
-    @ManyToOne
-    @JoinColumn(name = "cd_anunciante", referencedColumnName = "id_usuario")
-    @Schema(description = "Anunciante responsável pelo evento.")
-    private Usuario anunciante;
 }

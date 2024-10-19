@@ -3,7 +3,7 @@
  * Description: Model for the Produto entity.
  * Author: Camilla Ucci de Menezes
  * Creation Date: 27/08/2024
- * Last Updated: 27/08/2024
+ * Last Updated: 13/10/2024
  */
 package blomera.praceando.praceandoapipg.model;
 
@@ -26,7 +26,6 @@ import java.time.LocalDateTime;
 @Entity(name = "produto")
 @Schema(description = "Representa um produto utilizado no sistema Praceando.")
 public class Produto {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_produto")
@@ -61,11 +60,11 @@ public class Produto {
     @Schema(description = "Nome da categoria do produto.", example = "Carnes")
     private String nmCategoria;
 
-    @Column(name = "dt_atualizacao")
-    @Schema(description = "Data e hora da última atualização do produto.", example = "2024-08-18T10:00:00")
-    private LocalDateTime dtAtualizacao;
-
     @Column(name = "dt_desativacao")
     @Schema(description = "Data e hora da desativação do produto.", example = "2024-08-25T15:30:00")
     private LocalDateTime dtDesativacao;
+
+    @Column(name = "dt_atualizacao")
+    @Schema(description = "Data e hora da última atualização do produto.", example = "2024-08-18T10:00:00")
+    private LocalDateTime dtAtualizacao;
 }

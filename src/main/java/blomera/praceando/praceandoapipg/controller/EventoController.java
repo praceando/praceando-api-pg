@@ -7,7 +7,9 @@
  */
 package blomera.praceando.praceandoapipg.controller;
 
+import blomera.praceando.praceandoapipg.dto.EventoRequest;
 import blomera.praceando.praceandoapipg.model.Evento;
+import blomera.praceando.praceandoapipg.model.Produto;
 import blomera.praceando.praceandoapipg.service.EventoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/evento")
@@ -54,14 +57,15 @@ public class EventoController {
             @ApiResponse(responseCode = "201", description = "Evento inserido com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro na requisição")
     })
-    public ResponseEntity<?> inserirEvento(@RequestBody Evento evento) {
+    public ResponseEntity<?> inserirEvento(@RequestBody EventoRequest eventoRequest) {
         try {
-            Evento novaEvento = eventoService.saveEvento(evento);
-            return ResponseEntity.status(HttpStatus.CREATED).body(novaEvento);
+            eventoService.saveEvento(eventoRequest.getEvento(), eventoRequest.getTags());
+            return ResponseEntity.status(HttpStatus.CREATED).body("Evento inserido com sucesso.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao inserir evento.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao inserir evento." + e.getMessage());
         }
     }
+
 
     @GetMapping("/find/{id}")
     @Operation(summary = "Busca um evento pelo ID", description = "Retorna um evento pelo seu ID")
@@ -137,6 +141,17 @@ public class EventoController {
             return ResponseEntity.ok("Evento excluído com sucesso.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Evento não encontrado.");
+        }
+    }
+
+    @DeleteMapping("/soft-delete/{id}")
+    @Operation(summary = "Desativa um evento ao invés de removê-lo.")
+    public ResponseEntity<String> softDeleteEvento(@PathVariable Long id) {
+        Optional<Evento> evento = eventoService.softDelete(id);
+        if (evento.isPresent()) {
+            return ResponseEntity.ok("Evento desativado com sucesso.");
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 

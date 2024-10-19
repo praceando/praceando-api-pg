@@ -54,7 +54,7 @@ public class AcessoService {
      * @return acesso inserido.
      */
     public Acesso saveAcesso(Acesso acesso) {
-        acesso.setDtAtualizacao(LocalDateTime.now()); // Atualiza a data ao salvar um novo acesso
+        acesso.setDtAtualizacao(LocalDateTime.now());
         return acessoRepository.save(acesso);
     }
 

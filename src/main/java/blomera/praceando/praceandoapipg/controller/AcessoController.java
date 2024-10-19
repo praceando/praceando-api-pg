@@ -3,7 +3,7 @@
  * Description: Controller for the Acesso entity.
  * Author: Camilla Ucci de Menezes
  * Creation Date: 02/10/2024
- * Last Updated: 02/10/2024
+ * Last Updated: 03/10/2024
  */
 package blomera.praceando.praceandoapipg.controller;
 
@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/acesso")
-@Tag(name = "Acesso", description = "Gerenciar acessos no sistema Praceando")
+@Tag(name = "Acesso", description = "Gerenciar acessos")
 public class AcessoController {
     private final AcessoService acessoService;
 

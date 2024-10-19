@@ -91,13 +91,6 @@
             <version>5.2.2</version>
         </dependency>
 
-        <!-- Firebase -->
-        <dependency>
-            <groupId>com.google.firebase</groupId>
-            <artifactId>firebase-admin</artifactId>
-            <version>8.1.0</version>
-        </dependency>
-
         <!-- JJWT API: Métodos e classes para manipulação de tokens -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

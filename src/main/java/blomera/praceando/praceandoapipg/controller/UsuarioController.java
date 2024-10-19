@@ -3,7 +3,7 @@
  * Description: Controller for the Usuario entity.
  * Author: Camilla Ucci de Menezes
  * Creation Date: 30/09/2024
- * Last Updated: 30/09/2024
+ * Last Updated: 03/09/2024
  */
 package blomera.praceando.praceandoapipg.controller;
 
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/usuario")
-@Tag(name = "Usuario", description = "Gerenciar usuários do sistema Praceando.")
+@Tag(name = "Usuario", description = "Gerenciar usuários.")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -27,7 +27,7 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    @PatchMapping("/soft-delete/{id}")
+    @DeleteMapping("/soft-delete/{id}")
     @Operation(summary = "Desativa um usuário ao invés de removê-lo.")
     public ResponseEntity<String> softDeleteUsuario(@PathVariable Long id) {
         Optional<Usuario> usuario = usuarioService.softDelete(id);

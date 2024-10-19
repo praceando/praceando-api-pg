@@ -12,6 +12,7 @@ import blomera.praceando.praceandoapipg.model.FraseSustentavel;
 import blomera.praceando.praceandoapipg.repository.FraseSustentavelRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,7 +67,8 @@ public class FraseSustentavelService {
         FraseSustentavel existingFraseSustentavel = getFraseSustentavelById(id);
         if (existingFraseSustentavel != null) {
             existingFraseSustentavel.setDsFrase(fraseSustentavel.getDsFrase());
-            existingFraseSustentavel.setDtAtualizacao(fraseSustentavel.getDtAtualizacao());
+            existingFraseSustentavel.setDtFrase(fraseSustentavel.getDtFrase());
+            existingFraseSustentavel.setDtAtualizacao(LocalDateTime.now());
             return fraseSustentavelRepository.save(existingFraseSustentavel);
         }
         return null;

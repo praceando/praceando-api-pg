@@ -3,7 +3,7 @@
  * Description: Model for the sustainable_phrase entity.
  * Author: Camilla Ucci de Menezes
  * Creation Date: 23/08/2024
- * Last Updated: 23/08/2024
+ * Last Updated: 13/10/2024
  */
 package blomera.praceando.praceandoapipg.model;
 
@@ -37,6 +37,11 @@ public class FraseSustentavel {
     @Column(name = "ds_frase")
     @Schema(description = "Descrição da frase sustentável.", example = "Reduzir, Reutilizar, Reciclar")
     private String dsFrase;
+
+    @NotNull(message = "O campo 'dt_frase' (data da frase) não pode ser nulo.")
+    @Column(name = "dt_frase")
+    @Schema(description = "Data e hora da frase.", example = "2024-08-18T10:00:00")
+    private LocalDateTime dtFrase;
 
     @NotNull(message = "O campo 'dt_atualizacao' (data de atualização) não pode ser nulo.")
     @Past(message = "A data de atualização ('dt_atualizacao') deve estar no passado.")

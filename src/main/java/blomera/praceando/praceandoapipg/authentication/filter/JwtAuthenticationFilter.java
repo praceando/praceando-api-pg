@@ -13,6 +13,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
+import java.util.List;
+
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final CustomUserDetailsService userDetailsService;
     private final SecretKey secretKey;
@@ -27,6 +29,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
 
+        String requestURI = request.getRequestURI();
+
+        List<String> publicRoutes = List.of(
+                "/api/evento/.*",
+                "/api/auth/.*",
+                "/swagger-ui/.*",
+                "/v3/api-docs/.*",
+                "/api/usuario/.*",
+                "/api/tag/.*",
+                "/api/acesso/.*"
+        );
+
+        boolean isPublicRoute = publicRoutes.stream().anyMatch(route -> requestURI.matches(route.replace("**", ".*")));
+
+        if (isPublicRoute) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
             try {
@@ -40,16 +61,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (username != null) {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
+                            userDetails, null, userDetails.getAuthorities());
+
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             } catch (Exception e) {
                 response.setContentType("application/json");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("{\"error\": \"Erro durante parse de token (verifique se não está utilizando um token antigo): " + e.getMessage() + "\"}");
+                response.getWriter().write("{\"error\": \"Token inválido ou expirado: " + e.getMessage() + "\"}");
                 return;
             }
         }

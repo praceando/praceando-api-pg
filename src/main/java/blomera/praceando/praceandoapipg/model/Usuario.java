@@ -3,7 +3,7 @@
  * Description: Model for the Usuario entity.
  * Author: Camilla Ucci de Menezes
  * Creation Date: 30/08/2024
- * Last Updated: 02/10/2024
+ * Last Updated: 10/10/2024
  */
 package blomera.praceando.praceandoapipg.model;
 
@@ -23,9 +23,9 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @EqualsAndHashCode
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity(name = "usuario")
 @Schema(description = "Representa um usuário do sistema Praceando.")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Usuario {
 
     @Id
@@ -33,6 +33,11 @@ public class Usuario {
     @Column(name = "id_usuario")
     @Schema(description = "Identificador único do usuário.", example = "1")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "cd_acesso", referencedColumnName = "id_acesso")
+    @Schema(description = "Acessos do usuário.", example = "2")
+    private Acesso acesso;
 
     @Column(name = "cd_inventario_avatar")
     @Schema(description = "Código do avatar do usuário.", example = "101")
@@ -42,6 +47,10 @@ public class Usuario {
     @JoinColumn(name = "cd_genero", referencedColumnName = "id_genero")
     @Schema(description = "Gênero do usuário.", example = "2")
     private Genero genero;
+
+    @Column(name = "cd_tipo_usuario")
+    @Schema(description = "Código do tipo do usuário.", example = "101")
+    private Integer cdTipoUsuario;
 
     @NotBlank(message = "O nome do usuário ('nm_usuario') não pode estar vazio.")
     @Column(name = "nm_usuario", length = 255)
@@ -62,7 +71,6 @@ public class Usuario {
     @Schema(description = "Senha do usuário.", example = "Senha123@")
     private String dsSenha;
 
-
     @Column(name = "is_premium")
     @Schema(description = "Indica se o usuário é um assinante premium.", example = "true")
     private Boolean isPremium;
@@ -82,9 +90,4 @@ public class Usuario {
     @Column(name = "dt_atualizacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_DATE")
     @Schema(description = "Data e hora da última atualização do usuário.", example = "2024-08-27T10:00:00")
     private LocalDateTime dtAtualizacao;
-
-    @ManyToOne
-    @JoinColumn(name = "cd_acesso", referencedColumnName = "id_acesso")
-    @Schema(description = "Acessos do usuário.", example = "2")
-    private Acesso acesso;
 }

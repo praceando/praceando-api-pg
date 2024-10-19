@@ -97,7 +97,7 @@ public class ProdutoController {
         }
     }
 
-    @PatchMapping("/soft-delete/{id}")
+    @DeleteMapping("/soft-delete/{id}")
     @Operation(summary = "Desativa um produto ao invés de removê-lo.")
     public ResponseEntity<String> softDeleteProduto(@PathVariable Long id) {
         Optional<Produto> produto = produtoService.softDelete(id);
