@@ -57,7 +57,7 @@ public class AuthController {
         Usuario user = userService.getUsuarioByEmail(loginRequest.getDsEmail());
 
         if (user != null && passwordEncoder.matches(loginRequest.getDsSenha(), user.getDsSenha())) {
-            Acesso role = roleService.getAcessoById(user.getAcesso().getIdAcesso());
+            Acesso role = roleService.getAcessoById(user.getAcesso().getId());
             try {
                 String token = Jwts.builder()
                         .setSubject(loginRequest.getDsEmail()) // Identificador do usuário

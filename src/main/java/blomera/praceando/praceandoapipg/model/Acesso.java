@@ -27,7 +27,7 @@ public class Acesso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_acesso", nullable = false)
     @Schema(description = "Identificador único do acesso.", example = "1")
-    private Long idAcesso;
+    private Long id;
 
     @NotBlank(message = "O nome de acesso ('nm_acesso') não pode estar vazio.")
     @Column(name = "nm_acesso", nullable = false, unique = true, length = 255)

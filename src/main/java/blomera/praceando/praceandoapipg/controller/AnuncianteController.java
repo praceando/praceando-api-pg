@@ -7,8 +7,12 @@
  */
 package blomera.praceando.praceandoapipg.controller;
 
+import blomera.praceando.praceandoapipg.model.Acesso;
 import blomera.praceando.praceandoapipg.model.Anunciante;
+import blomera.praceando.praceandoapipg.model.Genero;
+import blomera.praceando.praceandoapipg.service.AcessoService;
 import blomera.praceando.praceandoapipg.service.AnuncianteService;
+import blomera.praceando.praceandoapipg.service.GeneroService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,10 +30,14 @@ import java.util.List;
 @Tag(name = "Anunciante", description = "Gerenciar anunciantes")
 public class AnuncianteController {
     private final AnuncianteService anuncianteService;
+    private final AcessoService acessoService;
+    private final GeneroService generoService;
 
     @Autowired
-    public AnuncianteController(AnuncianteService anuncianteService) {
+    public AnuncianteController(AnuncianteService anuncianteService, AcessoService acessoService, GeneroService generoService) {
         this.anuncianteService = anuncianteService;
+        this.acessoService = acessoService;
+        this.generoService = generoService;
     }
 
     @GetMapping("/read")
@@ -55,6 +63,12 @@ public class AnuncianteController {
     })
     public ResponseEntity<?> inserirAnunciante(@RequestBody Anunciante anunciante) {
         try {
+            Acesso acesso = acessoService.getAcessoById(Long.valueOf(1));
+            anunciante.setAcesso(acesso);
+
+            Genero genero = generoService.getGeneroById(anunciante.getGenero().getId());
+            anunciante.setGenero(genero);
+
             Anunciante novoAnunciante = anuncianteService.validateAndPersistAnunciante(anunciante);
             return ResponseEntity.status(HttpStatus.CREATED).body(novoAnunciante);
         } catch (Exception e) {

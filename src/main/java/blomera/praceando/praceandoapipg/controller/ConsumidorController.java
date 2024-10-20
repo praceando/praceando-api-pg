@@ -7,8 +7,12 @@
  */
 package blomera.praceando.praceandoapipg.controller;
 
+import blomera.praceando.praceandoapipg.model.Acesso;
 import blomera.praceando.praceandoapipg.model.Consumidor;
+import blomera.praceando.praceandoapipg.model.Genero;
+import blomera.praceando.praceandoapipg.service.AcessoService;
 import blomera.praceando.praceandoapipg.service.ConsumidorService;
+import blomera.praceando.praceandoapipg.service.GeneroService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,17 +23,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/consumidor")
 @Tag(name = "Consumidor", description = "Gerenciar consumidores")
 public class ConsumidorController {
     private final ConsumidorService consumidorService;
+    private final AcessoService acessoService;
+    private final GeneroService generoService;
 
     @Autowired
-    public ConsumidorController(ConsumidorService consumidorService) {
+    public ConsumidorController(ConsumidorService consumidorService, AcessoService acessoService, GeneroService generoService) {
         this.consumidorService = consumidorService;
+        this.acessoService = acessoService;
+        this.generoService = generoService;
     }
 
     @GetMapping("/read")
@@ -55,6 +65,10 @@ public class ConsumidorController {
     })
     public ResponseEntity<?> inserirConsumidor(@RequestBody Consumidor consumidor) {
         try {
+            Acesso acesso = acessoService.getAcessoById(Long.valueOf(1));
+            consumidor.setAcesso(acesso);
+            Genero genero = generoService.getGeneroById(consumidor.getGenero().getId());
+            consumidor.setGenero(genero);
             Consumidor novoConsumidor = consumidorService.saveConsumidor(consumidor);
             return ResponseEntity.status(HttpStatus.CREATED).body(novoConsumidor);
         } catch (Exception e) {
@@ -81,15 +95,14 @@ public class ConsumidorController {
     @Operation(summary = "Verifica se o nickname já está em uso", description = "Retorna um booleano indicando se o nickname já existe")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Verificação realizada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Consumidor não encontrado com esse nickname")
     })
     public ResponseEntity<?> verificarNickname(@Parameter(description = "Nickname do consumidor a ser verificado") @PathVariable String nickname) {
         boolean existe = consumidorService.existsByNickname(nickname);
-        if (existe) {
-            return ResponseEntity.ok("O nickname já está em uso.");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("O nickname está disponível.");
-        }
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("nicknameEmUso", existe);
+
+        return ResponseEntity.ok(response);
     }
 
 
