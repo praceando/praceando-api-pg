@@ -8,6 +8,7 @@
 
 package blomera.praceando.praceandoapipg.service;
 
+import blomera.praceando.praceandoapipg.dto.EventoDTO;
 import blomera.praceando.praceandoapipg.model.Evento;
 import blomera.praceando.praceandoapipg.model.EventoTag;
 import blomera.praceando.praceandoapipg.repository.EventoRepository;
@@ -18,7 +19,11 @@ import org.springframework.stereotype.Service;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,11 +42,32 @@ public class EventoService {
     }
 
     /**
-     * @return uma lista de objetos Evento se existirem, ou null se não houver nenhum evento.
+     * @return uma lista de objetos EventoDTO (incluindo tags) se existirem, ou null se não houver nenhum evento.
      */
-    public List<Evento> getEventos() {
-        List<Evento> eventos = eventoRepository.findAll();
-        return eventos.isEmpty() ? null : eventos;
+    public List<EventoDTO> getEventos() {
+        List<Object[]> resultados = eventoRepository.findAllWithTags();
+
+        if (resultados.isEmpty()) {
+            return null;
+        }
+
+        List<EventoDTO> eventos = new ArrayList<>();
+
+        for (Object[] resultado : resultados) {
+            String nomeEvento = (String) resultado[1];
+            String nomeLocal = (String) resultado[2];
+            LocalDate dataInicio = ((java.sql.Date) resultado[3]).toLocalDate();
+            LocalTime horaInicio = ((java.sql.Time) resultado[4]).toLocalTime();
+            LocalDate dataFim = ((java.sql.Date) resultado[5]).toLocalDate();
+            LocalTime horaFim = ((java.sql.Time) resultado[6]).toLocalTime();
+            String[] tagsArray = (String[]) resultado[7];
+            List<String> tags = Arrays.asList(tagsArray);
+
+            EventoDTO eventoDTO = new EventoDTO(nomeEvento, nomeLocal, dataInicio, horaInicio, dataFim, horaFim, tags);
+            eventos.add(eventoDTO);
+        }
+
+        return eventos;
     }
 
     /**
@@ -55,17 +81,61 @@ public class EventoService {
     /**
      * @return lista de eventos por anunciante.
      */
-    public List<Evento> findEventosByAnunciante(Long anuncianteId) {
-        return eventoRepository.findEventosByAnunciante_IdOrderById(anuncianteId);
+    public List<EventoDTO> findEventosByAnunciante(Long anuncianteId) {
+        List<Object[]> resultados = eventoRepository.findEventosByAnuncianteWithTags(anuncianteId);
+
+        if (resultados.isEmpty()) {
+            return null;
+        }
+
+        List<EventoDTO> eventos = new ArrayList<>();
+
+        for (Object[] resultado : resultados) {
+            String nomeEvento = (String) resultado[1];
+            String nomeLocal = (String) resultado[2];
+            LocalDate dataInicio = ((java.sql.Date) resultado[3]).toLocalDate();
+            LocalTime horaInicio = ((java.sql.Time) resultado[4]).toLocalTime();
+            LocalDate dataFim = ((java.sql.Date) resultado[5]).toLocalDate();
+            LocalTime horaFim = ((java.sql.Time) resultado[6]).toLocalTime();
+
+            String[] tagsArray = (String[]) resultado[7];
+            List<String> tags = Arrays.asList(tagsArray);
+
+            EventoDTO eventoDTO = new EventoDTO(nomeEvento, nomeLocal, dataInicio, horaInicio, dataFim, horaFim, tags);
+            eventos.add(eventoDTO);
+        }
+
+        return eventos;
     }
 
     /**
-     * @param dtFim Id do evento a ser atualizado.
-     * @param dtInicio Evento com os novos dados.
-     * @return lista de eventos com base na data de início e fim.
+     * @param data data na qual os eventos serão buscados
+     * @return lista de eventos ativos na data.
      */
-    public List<Evento> findEventosByDateRange(LocalDateTime dtInicio, LocalDateTime dtFim) {
-        return eventoRepository.findEventosByDtFimAndDtInicioOrderById(dtFim, dtInicio);
+    public List<EventoDTO> findEventosByDateRange(LocalDate data) {
+        List<Object[]> resultados = eventoRepository.findEventosByDate(data);
+
+        if (resultados.isEmpty()) {
+            return null;
+        }
+
+        List<EventoDTO> eventos = new ArrayList<>();
+
+        for (Object[] resultado : resultados) {
+            String nomeEvento = (String) resultado[1];
+            String nomeLocal = (String) resultado[2];
+            LocalDate dataInicio = ((java.sql.Date) resultado[3]).toLocalDate();
+            LocalTime horaInicio = ((java.sql.Time) resultado[4]).toLocalTime();
+            LocalDate dataFim = ((java.sql.Date) resultado[5]).toLocalDate();
+            LocalTime horaFim = ((java.sql.Time) resultado[6]).toLocalTime();
+            String[] tagsArray = (String[]) resultado[7];
+            List<String> tags = Arrays.asList(tagsArray);
+
+            EventoDTO eventoDTO = new EventoDTO(nomeEvento, nomeLocal, dataInicio, horaInicio, dataFim, horaFim, tags);
+            eventos.add(eventoDTO);
+        }
+
+        return eventos;
     }
 
     /**

@@ -7,6 +7,7 @@
  */
 package blomera.praceando.praceandoapipg.controller;
 
+import blomera.praceando.praceandoapipg.dto.EventoDTO;
 import blomera.praceando.praceandoapipg.dto.EventoRequest;
 import blomera.praceando.praceandoapipg.model.Evento;
 import blomera.praceando.praceandoapipg.model.Produto;
@@ -21,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +45,7 @@ public class EventoController {
             @ApiResponse(responseCode = "404", description = "Nenhum evento encontrado")
     })
     public ResponseEntity<?> listarEventos() {
-        List<Evento> eventos = eventoService.getEventos();
+        List<EventoDTO> eventos = eventoService.getEventos();
         if (eventos != null) {
             return ResponseEntity.ok(eventos);
         } else {
@@ -103,7 +105,7 @@ public class EventoController {
             @ApiResponse(responseCode = "404", description = "Nenhum evento encontrado para este anunciante")
     })
     public ResponseEntity<?> buscarEventosPorAnunciante(@Parameter(description = "ID do anunciante") @PathVariable Long anuncianteId) {
-        List<Evento> eventos = eventoService.findEventosByAnunciante(anuncianteId);
+        List<EventoDTO> eventos = eventoService.findEventosByAnunciante(anuncianteId);
         if (!eventos.isEmpty()) {
             return ResponseEntity.ok(eventos);
         } else {
@@ -111,20 +113,18 @@ public class EventoController {
         }
     }
 
-    @GetMapping("/findByDateRange")
-    @Operation(summary = "Busca eventos por intervalo de datas", description = "Retorna uma lista de eventos que ocorreram entre duas datas específicas")
+    @GetMapping("/findByDate")
+    @Operation(summary = "Busca eventos por de data", description = "Retorna uma lista de eventos que estaram ativos na datas especificada")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Eventos encontrados com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Nenhum evento encontrado para este intervalo de datas")
+            @ApiResponse(responseCode = "404", description = "Nenhum evento encontrado para essa data")
     })
-    public ResponseEntity<?> buscarEventosPorIntervaloDeDatas(
-            @Parameter(description = "Data de início") @RequestParam LocalDateTime dtInicio,
-            @Parameter(description = "Data de fim") @RequestParam LocalDateTime dtFim) {
-        List<Evento> eventos = eventoService.findEventosByDateRange(dtInicio, dtFim);
+    public ResponseEntity<?> buscarEventosPorData(@Parameter(description = "Data a ser buscada") @RequestParam LocalDate data) {
+        List<EventoDTO> eventos = eventoService.findEventosByDateRange(data);
         if (!eventos.isEmpty()) {
             return ResponseEntity.ok(eventos);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum evento encontrado para este intervalo de datas.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum evento encontrado para essa data");
         }
     }
 
