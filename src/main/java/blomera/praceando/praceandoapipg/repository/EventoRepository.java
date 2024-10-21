@@ -13,17 +13,47 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 public interface EventoRepository extends JpaRepository<Evento, Long> {
 
-    List<Evento> findEventosByAnunciante_IdOrderById(Long anuncianteId);
-    List<Evento> findEventosByDtFimAndDtInicioOrderById(LocalDateTime dtFim, LocalDateTime dtInicio);
+    @Query(value = "SELECT e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim, array_agg(t.nm_tag) AS tags " +
+            "FROM evento e " +
+            "JOIN local l ON l.id_local = e.cd_local " +
+            "JOIN evento_tag et ON et.cd_evento = e.id_evento " +
+            "JOIN tag t ON t.id_tag = et.cd_tag " +
+            "WHERE e.cd_anunciante = :anuncianteId " +
+            "AND e.dt_desativacao IS NULL " +
+            "GROUP BY e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim ", nativeQuery = true)
+    List<Object[]> findEventosByAnuncianteWithTags(@Param("anuncianteId") Long anuncianteId);
+
+    @Query(value = "SELECT e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim, array_agg(t.nm_tag) AS tags " +
+            "FROM evento e " +
+            "JOIN local l ON l.id_local = e.cd_local " +
+            "JOIN evento_tag et ON et.cd_evento = e.id_evento " +
+            "JOIN tag t ON t.id_tag = et.cd_tag " +
+            "WHERE :data BETWEEN e.dt_inicio AND e.dt_fim " +
+            "AND e.dt_desativacao IS NULL " +
+            "GROUP BY e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim " +
+            "ORDER BY e.id_evento", nativeQuery = true)
+    List<Object[]> findEventosByDate(@Param("data") LocalDate data);
+
     @Override
     @Query(value = "SELECT * FROM evento e WHERE e.dt_desativacao IS NULL", nativeQuery = true)
     List<Evento> findAll();
+
+    @Query(value = "SELECT e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim, array_agg(t.nm_tag) AS tags " +
+            "FROM evento e " +
+            "JOIN local l ON l.id_local = e.cd_local " +
+            "JOIN evento_tag et ON et.cd_evento = e.id_evento " +
+            "JOIN tag t ON t.id_tag = et.cd_tag " +
+            "WHERE e.dt_desativacao IS NULL " +
+            "GROUP BY e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim", nativeQuery = true)
+    List<Object[]> findAllWithTags();
+
 
     @Override
     @Query(value = "SELECT * FROM evento e WHERE e.dt_desativacao IS NULL AND e.id_evento = :id", nativeQuery = true)
