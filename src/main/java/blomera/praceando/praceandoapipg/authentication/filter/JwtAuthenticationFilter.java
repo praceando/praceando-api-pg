@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 "/api/evento/find/.*",
                 "/api/pagamento/complete-purchase/.*",
                 "/api/anunciante/.*",
-                "/api/consumidor/*.*"
+                "/api/consumidor/.*"
         );
 
         boolean isPublicRoute = publicRoutes.stream().anyMatch(route -> requestURI.matches(route.replace("**", ".*")));

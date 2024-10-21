@@ -7,6 +7,7 @@
  */
 package blomera.praceando.praceandoapipg.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -30,12 +31,13 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
-    @Schema(description = "Identificador único do usuário.", example = "1")
+    @Schema(description = "Identificador único do usuário.")
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "cd_acesso", referencedColumnName = "id_acesso")
-    @Schema(description = "Acessos do usuário.", example = "2")
+    @Schema(description = "Acessos do usuário.")
+    @JsonIgnore
     private Acesso acesso;
 
     @Column(name = "cd_inventario_avatar")
@@ -44,7 +46,7 @@ public class Usuario {
 
     @ManyToOne
     @JoinColumn(name = "cd_genero", referencedColumnName = "id_genero")
-    @Schema(description = "Gênero do usuário.", example = "2")
+    @Schema(description = "Gênero do usuário.", example = "{\"id\": 1}")
     private Genero genero;
 
     @Column(name = "cd_tipo_usuario")
