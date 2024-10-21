@@ -7,10 +7,15 @@
  */
 package blomera.praceando.praceandoapipg.controller;
 
+import blomera.praceando.praceandoapipg.model.Anunciante;
 import blomera.praceando.praceandoapipg.model.Usuario;
 import blomera.praceando.praceandoapipg.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +31,21 @@ public class UsuarioController {
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
+
+//    @GetMapping("/find/{id}")
+//    @Operation(summary = "Busca um anunciante pelo ID", description = "Retorna um anunciante pelo seu ID")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Anunciante encontrado com sucesso"),
+//            @ApiResponse(responseCode = "404", description = "Anunciante não encontrado")
+//    })
+//    public ResponseEntity<?> buscarAnunciantePorId(@Parameter(description = "ID do anunciante a ser buscado") @PathVariable Long id) {
+//        Anunciante anunciante = anuncianteService.getAnuncianteById(id);
+//        if (anunciante != null) {
+//            return ResponseEntity.ok(anunciante);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anunciante não encontrado.");
+//        }
+//    }
 
     @DeleteMapping("/soft-delete/{id}")
     @Operation(summary = "Desativa um usuário ao invés de removê-lo.")
