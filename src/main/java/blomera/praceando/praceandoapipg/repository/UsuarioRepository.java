@@ -22,9 +22,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
         @Query(value = "SELECT * FROM usuario u WHERE u.dt_desativacao IS NULL", nativeQuery = true)
         List<Usuario> findAll();
 
-        @Override
-        @Query(value = "SELECT * FROM usuario u WHERE u.dt_desativacao IS NULL AND u.id_usuario = :id", nativeQuery = true)
-        Optional<Usuario> findById(@Param("id") Long id);
+        Optional<Usuario> findUsuarioByIdAndDtDesativacaoIsNull(Long id);
 
         Optional<Usuario> findByDsEmailEqualsIgnoreCase(String email);
 }

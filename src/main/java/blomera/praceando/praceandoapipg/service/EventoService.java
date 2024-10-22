@@ -10,9 +10,7 @@ package blomera.praceando.praceandoapipg.service;
 
 import blomera.praceando.praceandoapipg.dto.EventoDTO;
 import blomera.praceando.praceandoapipg.model.Evento;
-import blomera.praceando.praceandoapipg.model.EventoTag;
 import blomera.praceando.praceandoapipg.repository.EventoRepository;
-import blomera.praceando.praceandoapipg.repository.EventoTagRepository;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -26,18 +24,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class EventoService {
 
     private final EventoRepository eventoRepository;
-    private final EventoTagRepository eventoTagRepository;
     private final JdbcTemplate jdbcTemplate;
 
-    public EventoService(EventoRepository eventoRepository, EventoTagRepository eventoTagRepository, JdbcTemplate jdbcTemplate) {
+    public EventoService(EventoRepository eventoRepository, JdbcTemplate jdbcTemplate) {
         this.eventoRepository = eventoRepository;
-        this.eventoTagRepository = eventoTagRepository;
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -81,8 +76,8 @@ public class EventoService {
     /**
      * @return lista de eventos por anunciante.
      */
-    public List<EventoDTO> findEventosByAnunciante(Long anuncianteId) {
-        List<Object[]> resultados = eventoRepository.findEventosByAnuncianteWithTags(anuncianteId);
+    public List<EventoDTO> findEventosByAnunciante(Long idAnunciante) {
+        List<Object[]> resultados = eventoRepository.findEventosByAnuncianteWithTags(idAnunciante);
 
         if (resultados.isEmpty()) {
             return null;
@@ -141,11 +136,30 @@ public class EventoService {
     /**
      * @return lista de eventos por tag.
      */
-    public List<Evento> findEventosByTag(Long tagId) {
-        List<EventoTag> eventoTags = eventoTagRepository.findEventoTagsByTag_IdOrderById(tagId);
-        return eventoTags.stream()
-                .map(EventoTag::getEvento)
-                .collect(Collectors.toList());
+    public List<EventoDTO> findEventosByTag(Long idTag) {
+        List<Object[]> resultados = eventoRepository.findEventosByTagWithTags(idTag);
+
+        if (resultados.isEmpty()) {
+            return null;
+        }
+
+        List<EventoDTO> eventos = new ArrayList<>();
+
+        for (Object[] resultado : resultados) {
+            String nomeEvento = (String) resultado[1];
+            String nomeLocal = (String) resultado[2];
+            LocalDate dataInicio = ((java.sql.Date) resultado[3]).toLocalDate();
+            LocalTime horaInicio = ((java.sql.Time) resultado[4]).toLocalTime();
+            LocalDate dataFim = ((java.sql.Date) resultado[5]).toLocalDate();
+            LocalTime horaFim = ((java.sql.Time) resultado[6]).toLocalTime();
+            String[] tagsArray = (String[]) resultado[7];
+            List<String> tags = Arrays.asList(tagsArray);
+
+            EventoDTO eventoDTO = new EventoDTO(nomeEvento, nomeLocal, dataInicio, horaInicio, dataFim, horaFim, tags);
+            eventos.add(eventoDTO);
+        }
+
+        return eventos;
     }
 
     /**

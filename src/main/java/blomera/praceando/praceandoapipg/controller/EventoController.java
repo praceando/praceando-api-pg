@@ -90,7 +90,7 @@ public class EventoController {
             @ApiResponse(responseCode = "404", description = "Nenhum evento encontrado para esta tag")
     })
     public ResponseEntity<?> buscarEventosPorTag(@Parameter(description = "ID da tag") @PathVariable Long tagId) {
-        List<Evento> eventos = eventoService.findEventosByTag(tagId);
+        List<EventoDTO> eventos = eventoService.findEventosByTag(tagId);
         if (!eventos.isEmpty()) {
             return ResponseEntity.ok(eventos);
         } else {
