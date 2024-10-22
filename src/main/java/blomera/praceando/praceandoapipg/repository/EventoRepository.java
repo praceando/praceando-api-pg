@@ -3,7 +3,7 @@
  * Description: Repository for the Evento entity
  * Author: Camilla Ucci de Menezes
  * Creation Date: 06/09/2024
- * Last Updated: 23/09/2024
+ * Last Updated: 21/10/2024
  */
 package blomera.praceando.praceandoapipg.repository;
 
@@ -25,10 +25,10 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
             "JOIN local l ON l.id_local = e.cd_local " +
             "JOIN evento_tag et ON et.cd_evento = e.id_evento " +
             "JOIN tag t ON t.id_tag = et.cd_tag " +
-            "WHERE e.cd_anunciante = :anuncianteId " +
+            "WHERE e.cd_anunciante = :idAnunciante " +
             "AND e.dt_desativacao IS NULL " +
             "GROUP BY e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim ", nativeQuery = true)
-    List<Object[]> findEventosByAnuncianteWithTags(@Param("anuncianteId") Long anuncianteId);
+    List<Object[]> findEventosByAnuncianteWithTags(@Param("idAnunciante") Long idAnunciante);
 
     @Query(value = "SELECT e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim, array_agg(t.nm_tag) AS tags " +
             "FROM evento e " +
@@ -54,6 +54,15 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
             "GROUP BY e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim", nativeQuery = true)
     List<Object[]> findAllWithTags();
 
+    @Query(value = "SELECT e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim, array_agg(t.nm_tag) AS tags " +
+            "FROM evento e " +
+            "JOIN local l ON l.id_local = e.cd_local " +
+            "JOIN evento_tag et ON et.cd_evento = e.id_evento " +
+            "JOIN tag t ON t.id_tag = et.cd_tag " +
+            "WHERE e.id_evento IN (SELECT et2.cd_evento FROM evento_tag et2 WHERE et2.cd_tag = :idTag) " +
+            "AND e.dt_desativacao IS NULL " +
+            "GROUP BY e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim ", nativeQuery = true)
+    List<Object[]> findEventosByTagWithTags(@Param("idTag") Long idTag);
 
     @Override
     @Query(value = "SELECT * FROM evento e WHERE e.dt_desativacao IS NULL AND e.id_evento = :id", nativeQuery = true)

@@ -38,7 +38,7 @@ public class UsuarioService {
      * @return usuário pelo id, se ele existir, caso contrário, retorna null
      */
     public Usuario getUsuarioById(Long id) {
-        Optional<Usuario> user = usuarioRepository.findById(id);
+        Optional<Usuario> user = usuarioRepository.findUsuarioByIdAndDtDesativacaoIsNull(id);
         return user.orElse(null);
     }
 
