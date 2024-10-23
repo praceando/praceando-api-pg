@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 public class EventoDTO {
+    private Long idEvento;
     private String nomeEvento;
     private String nomeLocal;
     private LocalDate dataInicio;

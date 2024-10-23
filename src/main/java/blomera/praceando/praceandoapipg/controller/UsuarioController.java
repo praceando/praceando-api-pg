@@ -65,6 +65,7 @@ public class UsuarioController {
             }
             response.put("inventario", String.valueOf(usuario.getCdInventarioAvatar()));
             response.put("tipoUsuario", String.valueOf(usuario.getAcesso().getId()));
+            response.put("bio", usuario.getDsUsuario());
 
             return ResponseEntity.ok(response);
         } else {

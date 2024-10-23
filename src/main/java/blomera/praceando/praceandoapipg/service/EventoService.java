@@ -42,13 +42,14 @@ public class EventoService {
     public List<EventoDTO> getEventos() {
         List<Object[]> resultados = eventoRepository.findAllWithTags();
 
-        if (resultados.isEmpty()) {
+        if (resultados == null) {
             return null;
         }
 
         List<EventoDTO> eventos = new ArrayList<>();
 
         for (Object[] resultado : resultados) {
+            Long idEvento = (Long) resultado[0];
             String nomeEvento = (String) resultado[1];
             String nomeLocal = (String) resultado[2];
             LocalDate dataInicio = ((java.sql.Date) resultado[3]).toLocalDate();
@@ -58,7 +59,7 @@ public class EventoService {
             String[] tagsArray = (String[]) resultado[7];
             List<String> tags = Arrays.asList(tagsArray);
 
-            EventoDTO eventoDTO = new EventoDTO(nomeEvento, nomeLocal, dataInicio, horaInicio, dataFim, horaFim, tags);
+            EventoDTO eventoDTO = new EventoDTO(idEvento, nomeEvento, nomeLocal, dataInicio, horaInicio, dataFim, horaFim, tags);
             eventos.add(eventoDTO);
         }
 
@@ -79,13 +80,14 @@ public class EventoService {
     public List<EventoDTO> findEventosByAnunciante(Long idAnunciante) {
         List<Object[]> resultados = eventoRepository.findEventosByAnuncianteWithTags(idAnunciante);
 
-        if (resultados.isEmpty()) {
+        if (resultados == null) {
             return null;
         }
 
         List<EventoDTO> eventos = new ArrayList<>();
 
         for (Object[] resultado : resultados) {
+            Long idEvento = (Long) resultado[0];
             String nomeEvento = (String) resultado[1];
             String nomeLocal = (String) resultado[2];
             LocalDate dataInicio = ((java.sql.Date) resultado[3]).toLocalDate();
@@ -96,7 +98,7 @@ public class EventoService {
             String[] tagsArray = (String[]) resultado[7];
             List<String> tags = Arrays.asList(tagsArray);
 
-            EventoDTO eventoDTO = new EventoDTO(nomeEvento, nomeLocal, dataInicio, horaInicio, dataFim, horaFim, tags);
+            EventoDTO eventoDTO = new EventoDTO(idEvento, nomeEvento, nomeLocal, dataInicio, horaInicio, dataFim, horaFim, tags);
             eventos.add(eventoDTO);
         }
 
@@ -110,13 +112,14 @@ public class EventoService {
     public List<EventoDTO> findEventosByDateRange(LocalDate data) {
         List<Object[]> resultados = eventoRepository.findEventosByDate(data);
 
-        if (resultados.isEmpty()) {
+        if (resultados == null) {
             return null;
         }
 
         List<EventoDTO> eventos = new ArrayList<>();
 
         for (Object[] resultado : resultados) {
+            Long idEvento = (Long) resultado[0];
             String nomeEvento = (String) resultado[1];
             String nomeLocal = (String) resultado[2];
             LocalDate dataInicio = ((java.sql.Date) resultado[3]).toLocalDate();
@@ -126,7 +129,7 @@ public class EventoService {
             String[] tagsArray = (String[]) resultado[7];
             List<String> tags = Arrays.asList(tagsArray);
 
-            EventoDTO eventoDTO = new EventoDTO(nomeEvento, nomeLocal, dataInicio, horaInicio, dataFim, horaFim, tags);
+            EventoDTO eventoDTO = new EventoDTO(idEvento, nomeEvento, nomeLocal, dataInicio, horaInicio, dataFim, horaFim, tags);
             eventos.add(eventoDTO);
         }
 
@@ -139,13 +142,14 @@ public class EventoService {
     public List<EventoDTO> findEventosByTag(Long idTag) {
         List<Object[]> resultados = eventoRepository.findEventosByTagWithTags(idTag);
 
-        if (resultados.isEmpty()) {
+        if (resultados == null) {
             return null;
         }
 
         List<EventoDTO> eventos = new ArrayList<>();
 
         for (Object[] resultado : resultados) {
+            Long idEvento = (Long) resultado[0];
             String nomeEvento = (String) resultado[1];
             String nomeLocal = (String) resultado[2];
             LocalDate dataInicio = ((java.sql.Date) resultado[3]).toLocalDate();
@@ -155,7 +159,7 @@ public class EventoService {
             String[] tagsArray = (String[]) resultado[7];
             List<String> tags = Arrays.asList(tagsArray);
 
-            EventoDTO eventoDTO = new EventoDTO(nomeEvento, nomeLocal, dataInicio, horaInicio, dataFim, horaFim, tags);
+            EventoDTO eventoDTO = new EventoDTO(idEvento, nomeEvento, nomeLocal, dataInicio, horaInicio, dataFim, horaFim, tags);
             eventos.add(eventoDTO);
         }
 
