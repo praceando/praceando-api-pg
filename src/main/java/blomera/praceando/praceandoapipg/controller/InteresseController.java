@@ -7,10 +7,16 @@
  */
 package blomera.praceando.praceandoapipg.controller;
 
+import blomera.praceando.praceandoapipg.model.Evento;
+import blomera.praceando.praceandoapipg.model.Genero;
 import blomera.praceando.praceandoapipg.model.Interesse;
+import blomera.praceando.praceandoapipg.model.Usuario;
+import blomera.praceando.praceandoapipg.service.EventoService;
 import blomera.praceando.praceandoapipg.service.InteresseService;
+import blomera.praceando.praceandoapipg.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,10 +32,14 @@ import java.util.List;
 @Tag(name = "Interesse", description = "Gerenciar interesses")
 public class InteresseController {
     private final InteresseService interesseService;
+    private final EventoService eventoService;
+    private final UsuarioService usuarioService;
 
     @Autowired
-    public InteresseController(InteresseService interesseService) {
+    public InteresseController(InteresseService interesseService, EventoService eventoService, UsuarioService usuarioService) {
         this.interesseService = interesseService;
+        this.usuarioService = usuarioService;
+        this.eventoService = eventoService;
     }
 
     @GetMapping("/read")
@@ -53,8 +63,14 @@ public class InteresseController {
             @ApiResponse(responseCode = "201", description = "Interesse inserido com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro na requisição")
     })
-    public ResponseEntity<?> inserirInteresse(@RequestBody Interesse interesse) {
+    public ResponseEntity<?> inserirInteresse(@RequestBody @Schema(example = "{\n  \"consumidor\": {\n    \"id\": 0\n  },\n  \"evento\": {\n    \"id\": 1\n  }\n}") Interesse interesse) {
         try {
+            Usuario usuario = usuarioService.getUsuarioById(interesse.getConsumidor().getId());
+            interesse.setConsumidor(usuario);
+
+            Evento evento = eventoService.getEventoById(interesse.getEvento().getId());
+            interesse.setEvento(evento);
+
             Interesse novoInteresse = interesseService.saveInteresse(interesse);
             return ResponseEntity.status(HttpStatus.CREATED).body(novoInteresse);
         } catch (Exception e) {

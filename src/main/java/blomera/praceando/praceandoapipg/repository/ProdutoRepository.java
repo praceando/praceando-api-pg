@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     @Override
-    @Query(value = "SELECT * FROM produto p WHERE p.dt_desativacao IS NULL", nativeQuery = true)
+    @Query(value = "SELECT * FROM produto p WHERE p.dt_desativacao IS NULL AND p.qt_estoque > 0", nativeQuery = true)
     List<Produto> findAll();
 
     @Override
