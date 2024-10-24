@@ -61,6 +61,7 @@ public class ConsumidorService {
      * @return consumidor inserido.
      */
     public Consumidor saveConsumidor(Consumidor consumidor) {
+        consumidor.setIsPremium(false);
         consumidor.setDsSenha(new BCryptPasswordEncoder().encode(consumidor.getDsSenha()));
         consumidor.setDtCriacao(LocalDateTime.now());
         consumidor.setDtAtualizacao(LocalDateTime.now());
