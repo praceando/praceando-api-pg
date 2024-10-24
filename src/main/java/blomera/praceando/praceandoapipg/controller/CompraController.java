@@ -8,9 +8,16 @@
 package blomera.praceando.praceandoapipg.controller;
 
 import blomera.praceando.praceandoapipg.model.Compra;
+import blomera.praceando.praceandoapipg.model.Evento;
+import blomera.praceando.praceandoapipg.model.Produto;
+import blomera.praceando.praceandoapipg.model.Usuario;
 import blomera.praceando.praceandoapipg.service.CompraService;
+import blomera.praceando.praceandoapipg.service.EventoService;
+import blomera.praceando.praceandoapipg.service.ProdutoService;
+import blomera.praceando.praceandoapipg.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,10 +34,16 @@ import java.util.List;
 @Tag(name = "Compra", description = "Gerenciar compras")
 public class CompraController {
     private final CompraService compraService;
+    private final UsuarioService usuarioService;
+    private final EventoService eventoService;
+    private final ProdutoService produtoService;
 
     @Autowired
-    public CompraController(CompraService compraService) {
+    public CompraController(CompraService compraService, UsuarioService usuarioService, EventoService eventoService, ProdutoService produtoService) {
         this.compraService = compraService;
+        this.usuarioService = usuarioService;
+        this.eventoService = eventoService;
+        this.produtoService = produtoService;
     }
 
     @GetMapping("/read")
@@ -53,8 +67,21 @@ public class CompraController {
             @ApiResponse(responseCode = "201", description = "Compra inserida com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro na requisição")
     })
-    public ResponseEntity<?> inserirCompra(@RequestBody Compra compra) {
+    public ResponseEntity<?> inserirCompra(@RequestBody @Schema(example = "{\n  \"usuario\": {\n    \"id\": 0\n  },\n  \"produtos\": [\n    {\n      \"id\": 1\n    }\n  ],\n  \"evento\": {\n    \"id\": 1\n  },\n  \"vlTotal\": 199.99\n}") Compra compra) {
         try {
+            Usuario usuario = usuarioService.getUsuarioById(compra.getUsuario().getId());
+            compra.setUsuario(usuario);
+
+            Evento evento = eventoService.getEventoById(compra.getEvento().getId());
+            compra.setEvento(evento);
+
+            List<Produto> produtos = new ArrayList<>();
+            for (Produto produto : compra.getProdutos()) {
+                Produto produtoEncontrado = produtoService.getProdutoById(produto.getId());
+                produtos.add(produtoEncontrado);
+            }
+            compra.setProdutos(produtos);
+
             Compra novaCompra = compraService.saveCompra(compra);
             return ResponseEntity.status(HttpStatus.CREATED).body(novaCompra);
         } catch (Exception e) {

@@ -15,6 +15,7 @@ import blomera.praceando.praceandoapipg.service.AnuncianteService;
 import blomera.praceando.praceandoapipg.service.GeneroService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -61,7 +62,23 @@ public class AnuncianteController {
             @ApiResponse(responseCode = "201", description = "Anunciante inserido com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro na requisição")
     })
-    public ResponseEntity<?> inserirAnunciante(@RequestBody Anunciante anunciante) {
+    public ResponseEntity<?> inserirAnunciante(@RequestBody
+                                                   @Schema(example = "{\n" +
+                                                           "  \"cdInventarioAvatar\": 101,\n" +
+                                                           "  \"genero\": {\n" +
+                                                           "    \"id\": 1\n" +
+                                                           "  },\n" +
+                                                           "  \"cdTipoUsuario\": 101,\n" +
+                                                           "  \"nmUsuario\": \"Camilla Ucci\",\n" +
+                                                           "  \"dsEmail\": \"camis.linda@example.com\",\n" +
+                                                           "  \"dsSenha\": \"Senha123@\",\n" +
+                                                           "  \"isPremium\": true,\n" +
+                                                           "  \"dsUsuario\": \"Descrição adicional sobre o usuário.\",\n" +
+                                                           "  \"dtNascimento\": \"1980-06-15\",\n" +
+                                                           "  \"nmEmpresa\": \"Acme Corp.\",\n" +
+                                                           "  \"nrCnpj\": \"12345678000195\",\n" +
+                                                           "  \"nrTelefone\": \"11987654321\"\n" +
+                                                           "}") Anunciante anunciante) {
         try {
             Acesso acesso = acessoService.getAcessoById(Long.valueOf(1));
             anunciante.setAcesso(acesso);

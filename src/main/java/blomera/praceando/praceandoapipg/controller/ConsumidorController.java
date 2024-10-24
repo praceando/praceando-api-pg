@@ -15,6 +15,7 @@ import blomera.praceando.praceandoapipg.service.ConsumidorService;
 import blomera.praceando.praceandoapipg.service.GeneroService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -63,12 +64,28 @@ public class ConsumidorController {
             @ApiResponse(responseCode = "201", description = "Consumidor inserido com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro na requisição")
     })
-    public ResponseEntity<?> inserirConsumidor(@RequestBody Consumidor consumidor) {
+    public ResponseEntity<?> inserirConsumidor(@RequestBody
+                                                   @Schema(example = "{\n" +
+                                                           "  \"cdInventarioAvatar\": 101,\n" +
+                                                           "  \"genero\": {\n" +
+                                                           "    \"id\": 1\n" +
+                                                           "  },\n" +
+                                                           "  \"cdTipoUsuario\": 101,\n" +
+                                                           "  \"nmUsuario\": \"Camilla Ucci\",\n" +
+                                                           "  \"dsEmail\": \"camis.linda@example.com\",\n" +
+                                                           "  \"dsSenha\": \"Senha123@\",\n" +
+                                                           "  \"dsUsuario\": \"Descrição adicional sobre o usuário.\",\n" +
+                                                           "  \"dtNascimento\": \"2000-01-15\",\n" +
+                                                           "  \"nmNickname\": \"milla123\",\n" +
+                                                           "  \"nrPolen\": 50\n" +
+                                                           "}") Consumidor consumidor) {
         try {
             Acesso acesso = acessoService.getAcessoById(Long.valueOf(1));
             consumidor.setAcesso(acesso);
+
             Genero genero = generoService.getGeneroById(consumidor.getGenero().getId());
             consumidor.setGenero(genero);
+
             Consumidor novoConsumidor = consumidorService.saveConsumidor(consumidor);
             return ResponseEntity.status(HttpStatus.CREATED).body(novoConsumidor);
         } catch (Exception e) {
