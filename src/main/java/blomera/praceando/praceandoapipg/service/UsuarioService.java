@@ -43,6 +43,14 @@ public class UsuarioService {
     }
 
     /**
+     * @return usuário pelo e-mail, se ele existir, caso contrário, retorna null
+     */
+    public Usuario getUsuarioByEmail(String email) {
+        Optional<Usuario> user = usuarioRepository.findUsuarioByDsEmailEqualsIgnoreCaseAndDtDesativacaoIsNull(email);
+        return user.orElse(null);
+    }
+
+    /**
      * @return usuário deletado.
      */
     public Usuario deleteUsuarioById(Long id) {
@@ -99,11 +107,10 @@ public class UsuarioService {
     }
 
     /**
-     * @return usuário pelo email, se ele existir, caso contrário, retorna null
+     * @return boolean representando a existência ou não do email
      */
-    public Usuario getUsuarioByEmail(String email) {
-        Optional<Usuario> user = usuarioRepository.findByDsEmailEqualsIgnoreCase(email);
-        return user.orElse(null);
+    public boolean existsByEmail(String dsEmail) {
+        return usuarioRepository.existsByDsEmail(dsEmail);
     }
 }
 
