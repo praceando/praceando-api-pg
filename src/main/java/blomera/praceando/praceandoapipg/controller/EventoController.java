@@ -9,11 +9,14 @@ package blomera.praceando.praceandoapipg.controller;
 
 import blomera.praceando.praceandoapipg.dto.EventoDTO;
 import blomera.praceando.praceandoapipg.dto.EventoRequest;
-import blomera.praceando.praceandoapipg.model.Evento;
-import blomera.praceando.praceandoapipg.model.Produto;
+import blomera.praceando.praceandoapipg.model.*;
+import blomera.praceando.praceandoapipg.service.AnuncianteService;
 import blomera.praceando.praceandoapipg.service.EventoService;
+import blomera.praceando.praceandoapipg.service.LocalService;
+import blomera.praceando.praceandoapipg.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +26,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,10 +34,14 @@ import java.util.Optional;
 @Tag(name = "Evento", description = "Gerenciar eventos")
 public class EventoController {
     private final EventoService eventoService;
+    private final LocalService localService;
+    private final AnuncianteService anuncianteService;
 
     @Autowired
-    public EventoController(EventoService eventoService) {
+    public EventoController(EventoService eventoService, LocalService localService, AnuncianteService anuncianteService) {
         this.eventoService = eventoService;
+        this.localService = localService;
+        this.anuncianteService = anuncianteService;
     }
 
     @GetMapping("/read")
@@ -59,8 +65,34 @@ public class EventoController {
             @ApiResponse(responseCode = "201", description = "Evento inserido com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro na requisição")
     })
-    public ResponseEntity<?> inserirEvento(@RequestBody EventoRequest eventoRequest) {
+    public ResponseEntity<?> inserirEvento(@RequestBody
+                                               @Schema(example = "{\n" +
+                                                       "  \"evento\": {\n" +
+                                                       "    \"local\": {\n" +
+                                                       "      \"id\": 1\n" +
+                                                       "    },\n" +
+                                                       "    \"anunciante\": {\n" +
+                                                       "      \"id\": 0\n" +
+                                                       "    },\n" +
+                                                       "    \"nmEvento\": \"Festival de Sustentabilidade\",\n" +
+                                                       "    \"dsEvento\": \"Um evento que promove práticas sustentáveis.\",\n" +
+                                                       "    \"dtInicio\": \"2024-09-01\",\n" +
+                                                       "    \"hrInicio\": \"20:00:00\",\n" +
+                                                       "    \"dtFim\": \"2024-09-02\",\n" +
+                                                       "    \"hrFim\": \"20:00:00\",\n" +
+                                                       "    \"urlDocumentacao\": \"https://www.exemplo.com/documentacao\"\n" +
+                                                       "  },\n" +
+                                                       "  \"tags\": [\n" +
+                                                       "    \"string\"\n" +
+                                                       "  ]\n" +
+                                                       "}") EventoRequest eventoRequest) {
         try {
+            Local local = localService.getLocalById(eventoRequest.getEvento().getLocal().getId());
+            eventoRequest.getEvento().setLocal(local);
+
+            Anunciante anunciante = anuncianteService.getAnuncianteById(eventoRequest.getEvento().getAnunciante().getId());
+            eventoRequest.getEvento().setAnunciante(anunciante);
+
             eventoService.saveEvento(eventoRequest.getEvento(), eventoRequest.getTags());
             return ResponseEntity.status(HttpStatus.CREATED).body("Evento inserido com sucesso.");
         } catch (Exception e) {

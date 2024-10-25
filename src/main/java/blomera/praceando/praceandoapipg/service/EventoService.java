@@ -180,6 +180,8 @@ public class EventoService {
      */
     public void saveEvento(Evento evento, List<String> tags) {
         try {
+            evento.setQtInteresse(0);
+
             java.sql.Array tagsArray = jdbcTemplate.getDataSource().getConnection().createArrayOf("VARCHAR", tags.toArray());
 
             jdbcTemplate.execute((ConnectionCallback<Void>) con -> {
