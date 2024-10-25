@@ -104,5 +104,4 @@ public class ConsumidorService {
     public boolean existsByNickname(String nickname) {
         return consumidorRepository.existsByNmNickname(nickname);
     }
-
 }

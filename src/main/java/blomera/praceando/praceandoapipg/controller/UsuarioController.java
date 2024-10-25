@@ -73,6 +73,52 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/findByEmail/{email}")
+    @Operation(summary = "Busca um usuário pelo e-mail", description = "Retorna um usuário pelo seu e-mail")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
+    public ResponseEntity<?> buscarUsuarioPorEmail(@Parameter(description = "E-mail do usuário a ser buscado") @PathVariable String email) {
+        Usuario usuario = usuarioService.getUsuarioByEmail(email);
+
+        if (usuario != null) {
+            Map<String, String> response = new HashMap<>();
+            response.put("id", String.valueOf(usuario.getId()));
+
+            if (usuario.getAcesso().getId() == 2) {
+                Anunciante anunciante = anuncianteService.getAnuncianteById(usuario.getId());
+                response.put("nome", anunciante.getNmEmpresa());
+            } else if (usuario.getAcesso().getId() == 1) {
+                Consumidor consumidor = consumidorService.getConsumidorById(usuario.getId());
+                response.put("nome", consumidor.getNmNickname());
+            } else {
+                response.put("nome", usuario.getNmUsuario());
+            }
+            response.put("inventario", String.valueOf(usuario.getCdInventarioAvatar()));
+            response.put("tipoUsuario", String.valueOf(usuario.getAcesso().getId()));
+            response.put("bio", usuario.getDsUsuario());
+
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+        }
+    }
+
+    @GetMapping("/existsByEmail/{email}")
+    @Operation(summary = "Verifica se o e-mail já está em uso", description = "Retorna um booleano indicando se o e-mail já existe")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Verificação realizada com sucesso"),
+    })
+    public ResponseEntity<?> verificarEmail(@Parameter(description = "Email do consumidor a ser verificado") @PathVariable String email) {
+        boolean existe = usuarioService.existsByEmail(email);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("emailEmUso", existe);
+
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping("/soft-delete/{id}")
     @Operation(summary = "Desativa um usuário ao invés de removê-lo.")
     public ResponseEntity<String> softDeleteUsuario(@PathVariable Long id) {

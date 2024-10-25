@@ -23,6 +23,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
         List<Usuario> findAll();
 
         Optional<Usuario> findUsuarioByIdAndDtDesativacaoIsNull(Long id);
+        Optional<Usuario> findUsuarioByDsEmailEqualsIgnoreCaseAndDtDesativacaoIsNull(String email);
 
         Optional<Usuario> findByDsEmailEqualsIgnoreCase(String email);
+
+        boolean existsByDsEmail(String dsEmail);
+
 }
