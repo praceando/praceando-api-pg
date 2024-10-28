@@ -79,7 +79,8 @@ public class UsuarioController {
             @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
-    public ResponseEntity<?> buscarUsuarioPorEmail(@Parameter(description = "E-mail do usuário a ser buscado") @PathVariable String email) {
+    public ResponseEntity<?> buscarUsuarioPorEmail(
+            @Parameter(description = "E-mail do usuário a ser buscado") @PathVariable String email) {
         Usuario usuario = usuarioService.getUsuarioByEmail(email);
 
         if (usuario != null) {
@@ -88,13 +89,14 @@ public class UsuarioController {
 
             if (usuario.getAcesso().getId() == 2) {
                 Anunciante anunciante = anuncianteService.getAnuncianteById(usuario.getId());
-                response.put("nome", anunciante.getNmEmpresa());
+                response.put("nome", anunciante != null ? anunciante.getNmEmpresa() : "Nome não disponível");
             } else if (usuario.getAcesso().getId() == 1) {
                 Consumidor consumidor = consumidorService.getConsumidorById(usuario.getId());
-                response.put("nome", consumidor.getNmNickname());
+                response.put("nome", consumidor != null ? consumidor.getNmNickname() : "Nome não disponível");
             } else {
                 response.put("nome", usuario.getNmUsuario());
             }
+
             response.put("inventario", String.valueOf(usuario.getCdInventarioAvatar()));
             response.put("tipoUsuario", String.valueOf(usuario.getAcesso().getId()));
             response.put("bio", usuario.getDsUsuario());
@@ -104,6 +106,7 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
         }
     }
+
 
     @GetMapping("/existsByEmail/{email}")
     @Operation(summary = "Verifica se o e-mail já está em uso", description = "Retorna um booleano indicando se o e-mail já existe")
