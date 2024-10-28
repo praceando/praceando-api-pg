@@ -80,7 +80,7 @@ public class AnuncianteController {
                                                            "  \"nrTelefone\": \"11987654321\"\n" +
                                                            "}") Anunciante anunciante) {
         try {
-            Acesso acesso = acessoService.getAcessoById(Long.valueOf(1));
+            Acesso acesso = acessoService.getAcessoById(Long.valueOf(2));
             anunciante.setAcesso(acesso);
 
             Genero genero = generoService.getGeneroById(anunciante.getGenero().getId());
