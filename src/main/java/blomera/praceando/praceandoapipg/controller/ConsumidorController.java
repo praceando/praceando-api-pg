@@ -70,7 +70,6 @@ public class ConsumidorController {
                                                            "  \"genero\": {\n" +
                                                            "    \"id\": 1\n" +
                                                            "  },\n" +
-                                                           "  \"cdTipoUsuario\": 101,\n" +
                                                            "  \"nmUsuario\": \"Camilla Ucci\",\n" +
                                                            "  \"dsEmail\": \"camis.linda@example.com\",\n" +
                                                            "  \"dsSenha\": \"Senha123@\",\n" +

@@ -14,7 +14,18 @@ A **Praceando API** é uma API REST desenvolvida com **Spring Boot**, projetada 
    - CRUD para usuários.
    - Controle de permissões para divulgação de eventos por organizadores.
 
-3. Colocar o resto aqui que eu não lembro KKKKKKKKK
+3. **Gerenciamento de Compras e Produtos**:
+   - CRUD para transações de compra e produtos.
+
+4. **Interesses e Tags**:
+   - Associação de tags aos interesses dos usuários e eventos.
+
+5. **Gerenciamento de Anunciantes e Localidades**:
+   - Controle de dados sobre anunciantes e locais onde ocorrem eventos.
+
+6. **Frases Sustentáveis e Gênero**:
+   - Funções auxiliares para frases de incentivo à sustentabilidade e categorização por gênero.
+
 
 ## Objetivo da API
 
@@ -42,9 +53,19 @@ http://localhost:8080/swagger-ui.html
 
 ## Endpoints Principais
 
-- **/api/events**: CRUD de eventos.
-- **/api/users**: CRUD de usuários.
-- Terminar dpsskkk
+- **/api/evento**: Gerenciamento de eventos.
+- **/api/usuario**: Gerenciamento de usuários.
+- **/api/anunciante**: Gerenciamento de anunciantes.
+- **/api/compra**: Gerenciamento de transações de compra.
+- **/api/consumidor**: Gerenciamento dos dados dos consumidores.
+- **/api/fraseSustentavel**: Gerenciamento de frases de sustentabilidade.
+- **/api/genero**: Gerenciamento de gênero dos usuários.
+- **/api/interesse**: Gerenciamento de interesses dos usuários em eventos e tags.
+- **/api/local**: Gerenciamento de locais de eventos.
+- **/api/pagamento**: Gerenciamento de transações de pagamento e finalização de compras.
+- **/api/produto**: Gerenciamento de produtos.
+- **/api/tag**: Gerenciamento de tags para eventos e interesses dos usuários.
+- **/api/acesso**: Controle de acesso e autenticação.
 
 ---
 

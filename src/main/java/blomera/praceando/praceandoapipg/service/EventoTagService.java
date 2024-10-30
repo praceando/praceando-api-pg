@@ -12,6 +12,7 @@ import blomera.praceando.praceandoapipg.model.EventoTag;
 import blomera.praceando.praceandoapipg.repository.EventoTagRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +54,8 @@ public class EventoTagService {
      * @return EventoTag inserido.
      */
     public EventoTag saveEventoTag(EventoTag eventoTag) {
+        eventoTag.setDtAtualizacao(LocalDateTime.now());
+
         return eventoTagRepository.save(eventoTag);
     }
 
@@ -65,9 +68,10 @@ public class EventoTagService {
     public EventoTag updateEventoTag(Long id, EventoTag eventoTag) {
         EventoTag existingEventoTag = getEventoTagById(id);
         if (existingEventoTag != null) {
-            existingEventoTag.setDtAtualizacao(eventoTag.getDtAtualizacao());
+            existingEventoTag.setDtAtualizacao(LocalDateTime.now());
             existingEventoTag.setTag(eventoTag.getTag());
             existingEventoTag.setEvento(eventoTag.getEvento());
+
             return eventoTagRepository.save(existingEventoTag);
         }
         return null;

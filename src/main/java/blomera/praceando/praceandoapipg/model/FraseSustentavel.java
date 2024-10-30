@@ -28,18 +28,18 @@ public class FraseSustentavel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_frase")
+    @Column(name = "id_frase_sustentavel")
     @Schema(description = "Identificador único da frase sustentável.", example = "1")
     private long id;
 
-    @NotNull(message = "O campo 'ds_frase' (descrição da frase) não pode ser nulo.")
+    @NotNull(message = "O campo 'ds_frase_sustentavel' (descrição da frase) não pode ser nulo.")
     @Size(min = 3, max = 150, message = "A descrição da frase ('ds_frase') deve ter pelo menos 3 caracteres e no máximo 150.")
-    @Column(name = "ds_frase")
+    @Column(name = "ds_frase_sustentavel")
     @Schema(description = "Descrição da frase sustentável.", example = "Reduzir, Reutilizar, Reciclar")
     private String dsFrase;
 
-    @NotNull(message = "O campo 'dt_frase' (data da frase) não pode ser nulo.")
-    @Column(name = "dt_frase")
+    @NotNull(message = "O campo 'dt_frase_sustentavel' (data da frase) não pode ser nulo.")
+    @Column(name = "dt_frase_sustentavel")
     @Schema(description = "Data e hora da frase.", example = "2024-08-18T10:00:00")
     private LocalDateTime dtFrase;
 

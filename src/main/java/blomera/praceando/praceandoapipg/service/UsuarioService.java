@@ -65,6 +65,8 @@ public class UsuarioService {
     public Usuario saveUsuario(Usuario user) {
         user.setNmUsuario(user.getNmUsuario().strip().toUpperCase());
         user.setDsSenha(new BCryptPasswordEncoder().encode(user.getDsSenha()));
+        user.setDtAtualizacao(LocalDateTime.now());
+
         return usuarioRepository.save(user);
     }
 
@@ -80,13 +82,11 @@ public class UsuarioService {
             existingUsuario.setAcesso(user.getAcesso());
             existingUsuario.setCdInventarioAvatar(user.getCdInventarioAvatar());
             existingUsuario.setGenero(user.getGenero());
-            existingUsuario.setCdTipoUsuario(user.getCdTipoUsuario());
             existingUsuario.setNmUsuario(user.getNmUsuario());
             existingUsuario.setDsEmail(user.getDsEmail());
             existingUsuario.setDsSenha(new BCryptPasswordEncoder().encode(user.getDsSenha()));
             existingUsuario.setIsPremium(user.getIsPremium());
             existingUsuario.setDsUsuario(user.getDsUsuario());
-            existingUsuario.setDtCriacao(LocalDateTime.now());
             existingUsuario.setDtAtualizacao(LocalDateTime.now());
             return usuarioRepository.save(existingUsuario);
         }

@@ -8,6 +8,7 @@
 package blomera.praceando.praceandoapipg.controller;
 
 import blomera.praceando.praceandoapipg.model.Tag;
+import blomera.praceando.praceandoapipg.model.Usuario;
 import blomera.praceando.praceandoapipg.service.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tag")
@@ -108,6 +110,17 @@ public class TagController {
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar tag.");
+        }
+    }
+
+    @DeleteMapping("/soft-delete/{id}")
+    @Operation(summary = "Desativa uma tag ao invés de removê-la.")
+    public ResponseEntity<String> softDeleteTag(@PathVariable Long id) {
+        Optional<Tag> tag = tagService.softDelete(id);
+        if (tag.isPresent()) {
+            return ResponseEntity.ok("Tag desativada com sucesso.");
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }

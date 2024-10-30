@@ -81,7 +81,6 @@ public class ConsumidorService {
             existingConsumidor.setAcesso(consumidor.getAcesso());
             existingConsumidor.setCdInventarioAvatar(consumidor.getCdInventarioAvatar());
             existingConsumidor.setGenero(consumidor.getGenero());
-            existingConsumidor.setCdTipoUsuario(consumidor.getCdTipoUsuario());
             existingConsumidor.setNmUsuario(consumidor.getNmUsuario());
             existingConsumidor.setDsEmail(consumidor.getDsEmail());
             existingConsumidor.setDsSenha(new BCryptPasswordEncoder().encode(consumidor.getDsSenha()));
@@ -92,6 +91,7 @@ public class ConsumidorService {
             existingConsumidor.setNmNickname(consumidor.getNmNickname());
             existingConsumidor.setNrPolen(consumidor.getNrPolen());
             existingConsumidor.setDtAtualizacao(LocalDateTime.now());
+            existingConsumidor.setIsPossivelAnunciar(consumidor.getIsPossivelAnunciar());
 
             return consumidorRepository.save(existingConsumidor);
         }

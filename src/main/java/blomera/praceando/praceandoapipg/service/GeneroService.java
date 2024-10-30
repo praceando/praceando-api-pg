@@ -54,6 +54,8 @@ public class GeneroService {
      * @return gênero inserido.
      */
     public Genero saveGenero(Genero genero) {
+        genero.setDtAtualizacao(LocalDateTime.now());
+
         return generoRepository.save(genero);
     }
 

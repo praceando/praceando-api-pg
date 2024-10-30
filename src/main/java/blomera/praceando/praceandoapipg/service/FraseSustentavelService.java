@@ -54,6 +54,8 @@ public class FraseSustentavelService {
      * @return fraseSustentavel inserida.
      */
     public FraseSustentavel saveFraseSustentavel(FraseSustentavel fraseSustentavel) {
+        fraseSustentavel.setDtAtualizacao(LocalDateTime.now());
+
         return fraseSustentavelRepository.save(fraseSustentavel);
     }
 

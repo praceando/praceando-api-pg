@@ -53,6 +53,8 @@ public class ProdutoService {
      * @return produto inserido.
      */
     public Produto saveProduto(Produto produto) {
+        produto.setDtAtualizacao(LocalDateTime.now());
+
         return produtoRepository.save(produto);
     }
 

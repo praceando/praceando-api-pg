@@ -49,10 +49,6 @@ public class Usuario {
     @Schema(description = "Gênero do usuário.", example = "{\"id\": 1}")
     private Genero genero;
 
-    @Column(name = "cd_tipo_usuario")
-    @Schema(description = "Código do tipo do usuário.", example = "101")
-    private Integer cdTipoUsuario;
-
     @NotBlank(message = "O nome do usuário ('nm_usuario') não pode estar vazio.")
     @Column(name = "nm_usuario", length = 255)
     @Schema(description = "Nome do usuário.", example = "Camilla Ucci")

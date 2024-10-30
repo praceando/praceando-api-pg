@@ -55,6 +55,8 @@ public class LocalService {
      * @return local inserido.
      */
     public Local saveLocal(Local local) {
+        local.setDtAtualizacao(LocalDateTime.now());
+
         return localRepository.save(local);
     }
 

@@ -36,4 +36,8 @@ public class Consumidor extends Usuario {
     @Column(name = "nr_polen", columnDefinition = "INT DEFAULT 0")
     @Schema(description = "Quantidade de pólen do consumidor.", example = "50")
     private Integer nrPolen;
+
+    @Column(name = "is_possivel_anunciar", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @Schema(description = "Flag de possível anunciante.", example = "FALSE")
+    private Boolean isPossivelAnunciar;
 }
