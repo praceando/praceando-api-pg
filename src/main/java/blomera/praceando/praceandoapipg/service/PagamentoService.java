@@ -59,6 +59,8 @@ public class PagamentoService {
      * @return pagamento inserido.
      */
     public Pagamento savePagamento(Pagamento pagamento) {
+        pagamento.setDtAtualizacao(LocalDateTime.now());
+
         return pagamentoRepository.save(pagamento);
     }
 

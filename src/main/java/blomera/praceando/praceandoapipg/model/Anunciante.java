@@ -12,6 +12,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.br.CNPJ;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -38,16 +39,10 @@ public class Anunciante extends Usuario {
     private String nmEmpresa;
 
     @NotBlank(message = "O CNPJ ('nr_cnpj') não pode estar vazio.")
-    @Pattern(regexp = "\\d{14}", message = "O CNPJ ('nr_cnpj') deve conter exatamente 14 dígitos.")
+    @CNPJ(message = "O CNPJ ('nr_cnpj') é inválido.")
     @Column(name = "nr_cnpj", unique = true, length = 14)
-    @Schema(description = "CNPJ da empresa do anunciante, deve ser único e ter 14 dígitos.", example = "12345678000195")
+    @Schema(description = "CNPJ da empresa do anunciante", example = "12345678000195")
     private String nrCnpj;
-
-    @NotBlank(message = "O telefone ('nr_telefone') não pode estar vazio.")
-    @Pattern(regexp = "\\d{14}", message = "O telefone ('nr_telefone') deve conter exatamente 14 dígitos.")
-    @Column(name = "nr_telefone", unique = true, length = 14)
-    @Schema(description = "Número de telefone do anunciante, deve ser único e ter 14 dígitos.", example = "11987654321")
-    private String nrTelefone;
 
     @PrePersist
     @PreUpdate

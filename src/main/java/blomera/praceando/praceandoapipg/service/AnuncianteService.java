@@ -85,7 +85,6 @@ public class AnuncianteService {
             existingAnunciante.setAcesso(anunciante.getAcesso());
             existingAnunciante.setCdInventarioAvatar(anunciante.getCdInventarioAvatar());
             existingAnunciante.setGenero(anunciante.getGenero());
-            existingAnunciante.setCdTipoUsuario(anunciante.getCdTipoUsuario());
             existingAnunciante.setNmUsuario(anunciante.getNmUsuario());
             existingAnunciante.setDsEmail(anunciante.getDsEmail());
             existingAnunciante.setDsSenha(new BCryptPasswordEncoder().encode(anunciante.getDsSenha()));
@@ -96,7 +95,6 @@ public class AnuncianteService {
             existingAnunciante.setDtNascimento(anunciante.getDtNascimento());
             existingAnunciante.setNmEmpresa(anunciante.getNmEmpresa());
             existingAnunciante.setNrCnpj(anunciante.getNrCnpj());
-            existingAnunciante.setNrTelefone(anunciante.getNrTelefone());
             return anuncianteRepository.save(existingAnunciante);
         }
         return null;

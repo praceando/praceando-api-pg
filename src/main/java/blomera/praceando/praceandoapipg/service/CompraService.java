@@ -57,6 +57,7 @@ public class CompraService {
         compra.setDsStatus("Pendente");
         compra.setDtCompra(LocalDateTime.now());
         compra.setDtAtualizacao(LocalDateTime.now());
+
         return compraRepository.save(compra);
     }
 

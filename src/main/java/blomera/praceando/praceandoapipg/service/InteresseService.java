@@ -54,6 +54,8 @@ public class InteresseService {
      * @return interesse inserido.
      */
     public Interesse saveInteresse(Interesse interesse) {
+        interesse.setDtAtualizacao(LocalDateTime.now());
+
         return interesseRepository.save(interesse);
     }
 

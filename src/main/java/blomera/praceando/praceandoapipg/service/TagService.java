@@ -9,6 +9,7 @@
 package blomera.praceando.praceandoapipg.service;
 
 import blomera.praceando.praceandoapipg.model.Tag;
+import blomera.praceando.praceandoapipg.model.Usuario;
 import blomera.praceando.praceandoapipg.repository.TagRepository;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,8 @@ public class TagService {
      * @return tag inserida.
      */
     public Tag saveTag(Tag tag) {
+        tag.setDtAtualizacao(LocalDateTime.now());
+
         return tagRepository.save(tag);
     }
 
@@ -72,5 +75,18 @@ public class TagService {
             return tagRepository.save(existingTag);
         }
         return null;
+    }
+
+    /**
+     * @return tag excluido.
+     */
+    public Optional<Tag> softDelete(Long id) {
+        Optional<Tag> tag = tagRepository.findById(id);
+        if (tag.isPresent()) {
+            Tag t = tag.get();
+            t.setDtDesativacao(LocalDateTime.now());
+            tagRepository.save(t);
+        }
+        return tag;
     }
 }

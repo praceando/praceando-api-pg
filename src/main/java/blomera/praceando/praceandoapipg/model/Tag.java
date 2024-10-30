@@ -41,6 +41,10 @@ public class Tag {
     @Schema(description = "Descrição da categoria da tag.", example = "Categoria ambiental")
     private String dsCategoria;
 
+    @Column(name = "dt_desativacao")
+    @Schema(description = "Data e hora da desativação da tag.", example = "2024-08-31T15:30:00")
+    private LocalDateTime dtDesativacao;
+
     @Column(name = "dt_atualizacao")
     @Schema(description = "Data e hora da última atualização da tag.", example = "2024-08-18T10:00:00")
     private LocalDateTime dtAtualizacao;
