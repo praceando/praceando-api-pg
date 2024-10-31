@@ -7,17 +7,14 @@
  */
 package blomera.praceando.praceandoapipg.controller;
 
+import blomera.praceando.praceandoapipg.dto.CompraRequestDTO;
 import blomera.praceando.praceandoapipg.model.Compra;
-import blomera.praceando.praceandoapipg.model.Evento;
-import blomera.praceando.praceandoapipg.model.Produto;
-import blomera.praceando.praceandoapipg.model.Usuario;
 import blomera.praceando.praceandoapipg.service.CompraService;
 import blomera.praceando.praceandoapipg.service.EventoService;
 import blomera.praceando.praceandoapipg.service.ProdutoService;
 import blomera.praceando.praceandoapipg.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +23,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -62,30 +58,24 @@ public class CompraController {
     }
 
     @PostMapping("/create")
-    @Operation(summary = "Insere um nova compra", description = "Adiciona uma nova compra ao sistema")
+    @Operation(summary = "Insere uma nova compra", description = "Adiciona uma nova compra ao sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Compra inserida com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro na requisição")
     })
-    public ResponseEntity<?> inserirCompra(@RequestBody @Schema(example = "{\n  \"usuario\": {\n    \"id\": 0\n  },\n  \"produtos\": [\n    {\n      \"id\": 1\n    }\n  ],\n  \"evento\": {\n    \"id\": 1\n  },\n  \"vlTotal\": 199.99\n}") Compra compra) {
+    public ResponseEntity<?> inserirCompra(@RequestBody CompraRequestDTO compraRequestDTO) {
         try {
-            Usuario usuario = usuarioService.getUsuarioById(compra.getUsuario().getId());
-            compra.setUsuario(usuario);
+            compraService.saveCompra(
+                    compraRequestDTO.getCdUsuario().intValue(),
+                    compraRequestDTO.getCdProduto().intValue(),
+                    compraRequestDTO.getCdEvento().intValue(),
+                    compraRequestDTO.getVlTotal()
+            );
 
-            Evento evento = eventoService.getEventoById(compra.getEvento().getId());
-            compra.setEvento(evento);
-
-            List<Produto> produtos = new ArrayList<>();
-            for (Produto produto : compra.getProdutos()) {
-                Produto produtoEncontrado = produtoService.getProdutoById(produto.getId());
-                produtos.add(produtoEncontrado);
-            }
-            compra.setProdutos(produtos);
-
-            Compra novaCompra = compraService.saveCompra(compra);
-            return ResponseEntity.status(HttpStatus.CREATED).body(novaCompra);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Compra inserida com sucesso");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao inserir compra.");
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao inserir compra: " + e.getMessage());
         }
     }
 

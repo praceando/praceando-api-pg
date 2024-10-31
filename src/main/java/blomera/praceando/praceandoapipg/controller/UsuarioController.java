@@ -7,6 +7,8 @@
  */
 package blomera.praceando.praceandoapipg.controller;
 
+import blomera.praceando.praceandoapipg.dto.InteresseRequestDTO;
+import blomera.praceando.praceandoapipg.dto.InventarioRequestDTO;
 import blomera.praceando.praceandoapipg.model.Anunciante;
 import blomera.praceando.praceandoapipg.model.Consumidor;
 import blomera.praceando.praceandoapipg.model.Usuario;
@@ -18,13 +20,12 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/usuario")
@@ -132,4 +133,29 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("/add-inventory")
+    @Operation(summary = "Adiciona um inventário a um usuário", description = "Adiciona o código de inventário do avatar a um usuário.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Inventário atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+            @ApiResponse(responseCode = "400", description = "Erro na requisição")
+    })
+    public ResponseEntity<?> adicionarInventarioUsuario(@RequestBody InventarioRequestDTO inventarioRequestDTO) {
+        try {
+            Integer cdUsuario = inventarioRequestDTO.getCdUsuario().intValue();
+            Integer cdAvatar = inventarioRequestDTO.getCdAvatar().intValue();
+
+            usuarioService.setInventory(cdUsuario, cdAvatar);
+
+            return ResponseEntity.ok("Inventário do usuário atualizado com sucesso.");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Erro ao atualizar inventário do usuário: " + e.getMessage());
+        }
+    }
+
 }

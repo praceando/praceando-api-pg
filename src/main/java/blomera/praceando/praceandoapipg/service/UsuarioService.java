@@ -10,9 +10,15 @@ package blomera.praceando.praceandoapipg.service;
 
 import blomera.praceando.praceandoapipg.model.Usuario;
 import blomera.praceando.praceandoapipg.repository.UsuarioRepository;
+import org.springframework.jdbc.core.ConnectionCallback;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.CallableStatement;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +27,11 @@ import java.util.Optional;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final JdbcTemplate jdbcTemplate;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, JdbcTemplate jdbcTemplate) {
         this.usuarioRepository = usuarioRepository;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     /**
@@ -111,6 +119,29 @@ public class UsuarioService {
      */
     public boolean existsByEmail(String dsEmail) {
         return usuarioRepository.existsByDsEmail(dsEmail);
+    }
+
+    /**
+     * Atualiza o inventário do usuário com o ID do avatar fornecido,
+     * utilizando uma função de banco de dados para realizar a atualização.
+     *
+     * @param idUsuario O ID do usuário a ser atualizado.
+     * @param idAvatar O ID do avatar a ser inserido no inventário do usuário.
+     */
+    public void setInventory(Integer idUsuario, Integer idAvatar) {
+        jdbcTemplate.execute((ConnectionCallback<Void>) con -> {
+            try (CallableStatement callableStatement = con.prepareCall("{ CALL FNC_INSERIR_ID_AVATAR(?, ?) }")) {
+                callableStatement.setInt(1, idUsuario);
+                callableStatement.setInt(2, idAvatar);
+
+                callableStatement.execute();
+
+                return null;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Erro adicionar inventário: " + e.getMessage(), e);
+            }
+        });
     }
 }
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.CallableStatement;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -90,6 +91,9 @@ public class PagamentoService {
                 callableStatement.setInt(1, cdCompra.intValue());
                 callableStatement.execute();
                 return null;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Erro ao completar compra: " + e.getMessage(), e);
             }
         });
     }

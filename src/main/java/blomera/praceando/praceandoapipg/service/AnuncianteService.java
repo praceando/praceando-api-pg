@@ -100,6 +100,13 @@ public class AnuncianteService {
         return null;
     }
 
+    /**
+     * Calcula a idade de uma pessoa com base na data de nascimento fornecida,
+     * utilizando uma função de banco de dados para realizar o cálculo.
+     *
+     * @param dtNascimento A data de nascimento do anunciante.
+     * @return A idade calculada do anunciante.
+     */
     public int calculateAge(LocalDate dtNascimento) {
         return jdbcTemplate.execute((ConnectionCallback<Integer>) con -> {
             try (CallableStatement callableStatement = con.prepareCall("{ ? = CALL FNC_CALCULAR_IDADE(?) }")) {
@@ -113,6 +120,15 @@ public class AnuncianteService {
         });
     }
 
+    /**
+     * Valida e persiste os dados de um anunciante.
+     * Este método calcula a idade do anunciante com base na data de nascimento e verifica
+     * se ele possui idade mínima de 18 anos antes de persistir os dados no banco.
+     *
+     * @param anunciante O objeto Anunciante contendo os dados a serem validados e persistidos.
+     * @return O objeto Anunciante atualizado.
+     * @throws IllegalArgumentException Se a idade do anunciante for menor que 18 anos.
+     */
     @Transactional
     public Anunciante validateAndPersistAnunciante(Anunciante anunciante) {
         int idade = calculateAge(anunciante.getDtNascimento());

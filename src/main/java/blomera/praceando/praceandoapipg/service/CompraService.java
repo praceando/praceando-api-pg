@@ -10,8 +10,13 @@ package blomera.praceando.praceandoapipg.service;
 
 import blomera.praceando.praceandoapipg.model.Compra;
 import blomera.praceando.praceandoapipg.repository.CompraRepository;
+import org.springframework.jdbc.core.ConnectionCallback;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.sql.CallableStatement;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +25,11 @@ import java.util.Optional;
 public class CompraService {
 
     private final CompraRepository compraRepository;
+    private final JdbcTemplate jdbcTemplate;
 
-    public CompraService(CompraRepository compraRepository) {
+    public CompraService(CompraRepository compraRepository, JdbcTemplate jdbcTemplate) {
         this.compraRepository = compraRepository;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     /**
@@ -51,14 +58,23 @@ public class CompraService {
     }
 
     /**
-     * @return compra inserida.
+     * Método para inserir uma compra.
      */
-    public Compra saveCompra(Compra compra) {
-        compra.setDsStatus("Pendente");
-        compra.setDtCompra(LocalDateTime.now());
-        compra.setDtAtualizacao(LocalDateTime.now());
+    public void saveCompra(Integer cdUsuario, Integer cdProduto, Integer cdEvento, BigDecimal vlTotal) {
+        jdbcTemplate.execute((ConnectionCallback<Void>) con -> {
+            try (CallableStatement callableStatement = con.prepareCall("CALL PRC_REALIZAR_COMPRA(?, ?, ?, ?)")) {
+                callableStatement.setInt(1, cdUsuario);
+                callableStatement.setInt(2, cdProduto);
+                callableStatement.setInt(3, cdEvento);
+                callableStatement.setBigDecimal(4, vlTotal);
 
-        return compraRepository.save(compra);
+                callableStatement.execute();
+                return null;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Erro ao realizar compra: " + e.getMessage(), e);
+            }
+        });
     }
 
     /**
