@@ -9,23 +9,23 @@ package blomera.praceando.praceandoapipg.controller;
 
 import blomera.praceando.praceandoapipg.dto.EventoDTO;
 import blomera.praceando.praceandoapipg.dto.EventoRequest;
+import blomera.praceando.praceandoapipg.dto.InteresseRequestDTO;
 import blomera.praceando.praceandoapipg.model.*;
-import blomera.praceando.praceandoapipg.service.AnuncianteService;
-import blomera.praceando.praceandoapipg.service.EventoService;
-import blomera.praceando.praceandoapipg.service.LocalService;
-import blomera.praceando.praceandoapipg.service.UsuarioService;
+import blomera.praceando.praceandoapipg.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,12 +36,14 @@ public class EventoController {
     private final EventoService eventoService;
     private final LocalService localService;
     private final AnuncianteService anuncianteService;
+    private final UsuarioTagService usuarioTagService;
 
     @Autowired
-    public EventoController(EventoService eventoService, LocalService localService, AnuncianteService anuncianteService) {
+    public EventoController(EventoService eventoService, LocalService localService, AnuncianteService anuncianteService, UsuarioTagService usuarioTagService) {
         this.eventoService = eventoService;
         this.localService = localService;
         this.anuncianteService = anuncianteService;
+        this.usuarioTagService = usuarioTagService;
     }
 
     @GetMapping("/read")
@@ -205,4 +207,31 @@ public class EventoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar evento.");
         }
     }
+
+    @PutMapping("/add-interesse")
+    @Operation(summary = "Adiciona as tags ao interesse de um usuário", description = "Adiciona as tags ao interesse de um usuário.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Interesse atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Evento ou usuário não encontrado"),
+            @ApiResponse(responseCode = "400", description = "Erro na requisição")
+    })
+    public ResponseEntity<?> adicionarInteresseUsuario(@RequestBody InteresseRequestDTO interesseRequestDTO) {
+
+        try {
+            Integer idEvento = interesseRequestDTO.getIdEvento();
+            Integer idUsuario = interesseRequestDTO.getIdUsuario();
+            List<String> tags = interesseRequestDTO.getTags() != null ? interesseRequestDTO.getTags() : Collections.emptyList();
+
+            usuarioTagService.saveUsuarioTag(idUsuario, idEvento, tags);
+
+            return ResponseEntity.ok("Interesse do usuário atualizado com sucesso.");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Evento ou usuário não encontrado.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Erro ao atualizar interesse do usuário: " + e.getMessage());
+        }
+    }
+
 }
