@@ -99,6 +99,25 @@ public class ConsumidorService {
     }
 
     /**
+     * Atualiza os a bio e o nome
+     * @param id Id do consumidor a ser atualizado.
+     * @param name Novo nickname do consumidor.
+     * @param bio Nova descrição do consumidor.
+     * @return consumidor atualizado ou nulo, caso o consumidor não exista
+     */
+    public Consumidor updateConsumidor(Long id, String name, String bio) {
+        Consumidor existingConsumidor = getConsumidorById(id);
+        if (existingConsumidor != null) {
+            existingConsumidor.setDsUsuario(bio);
+            existingConsumidor.setNmNickname(name);
+            existingConsumidor.setDtAtualizacao(LocalDateTime.now());
+
+            return consumidorRepository.save(existingConsumidor);
+        }
+        return null;
+    }
+
+    /**
      * @return boolean representando a existência ou não do nickname
      */
     public boolean existsByNickname(String nickname) {

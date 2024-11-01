@@ -77,7 +77,7 @@ public class AnuncianteService {
      * Atualiza os dados de um anunciante.
      * @param id Id do anunciante a ser atualizado.
      * @param anunciante Anunciante com os novos dados.
-     * @return anunciante atualizado ou nulo, caso a compra não exista
+     * @return anunciante atualizado ou nulo, caso o anunciante não exista
      */
     public Anunciante updateAnunciante(Long id, Anunciante anunciante) {
         Anunciante existingAnunciante = getAnuncianteById(id);
@@ -95,6 +95,24 @@ public class AnuncianteService {
             existingAnunciante.setDtNascimento(anunciante.getDtNascimento());
             existingAnunciante.setNmEmpresa(anunciante.getNmEmpresa());
             existingAnunciante.setNrCnpj(anunciante.getNrCnpj());
+            return anuncianteRepository.save(existingAnunciante);
+        }
+        return null;
+    }
+
+    /**
+     * Atualiza os a bio e o nome
+     * @param id Id do anunciante a ser atualizado.
+     * @param name Novo nome da empresa.
+     * @param bio Nova descrição do anunciante
+     * @return anunciante atualizado ou nulo, caso o anunciante não exista
+     */
+    public Anunciante updateAnunciante(Long id, String name, String bio) {
+        Anunciante existingAnunciante = getAnuncianteById(id);
+        if (existingAnunciante != null) {
+            existingAnunciante.setDsUsuario(bio == null? existingAnunciante.getDsUsuario() : bio);
+            existingAnunciante.setDtAtualizacao(LocalDateTime.now());
+            existingAnunciante.setNmEmpresa(name == null? existingAnunciante.getNmEmpresa() : name);
             return anuncianteRepository.save(existingAnunciante);
         }
         return null;
