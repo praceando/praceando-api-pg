@@ -9,6 +9,7 @@ package blomera.praceando.praceandoapipg.controller;
 
 import blomera.praceando.praceandoapipg.dto.InteresseRequestDTO;
 import blomera.praceando.praceandoapipg.dto.InventarioRequestDTO;
+import blomera.praceando.praceandoapipg.dto.UsuarioDTO;
 import blomera.praceando.praceandoapipg.model.Anunciante;
 import blomera.praceando.praceandoapipg.model.Consumidor;
 import blomera.praceando.praceandoapipg.model.Usuario;
@@ -158,4 +159,42 @@ public class UsuarioController {
         }
     }
 
+    @PutMapping("/update-profile")
+    @Operation(summary = "Atualiza um usuário pelo ID", description = "Atualiza o nome e a bio de um usuário existente pelo seu ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+            @ApiResponse(responseCode = "400", description = "Erro na requisição")
+    })
+    public ResponseEntity<?> atualizarUsuario(@RequestBody UsuarioDTO usuarioAtualizado) {
+        try {
+            Usuario usuario = usuarioService.getUsuarioById(usuarioAtualizado.getId());
+
+            if (usuario.getAcesso().getId() == 2) {
+                Anunciante anunciante = anuncianteService.updateAnunciante(usuarioAtualizado.getId(), usuarioAtualizado.getName(), usuarioAtualizado.getBio());
+
+                if (anunciante != null) {
+                    return ResponseEntity.ok(anunciante);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anunciante não encontrado.");
+                }
+            } else if (usuario.getAcesso().getId() == 1) {
+                Consumidor consumidor = consumidorService.updateConsumidor(usuarioAtualizado.getId(), usuarioAtualizado.getName(), usuarioAtualizado.getBio());
+
+                if (consumidor != null) {
+                    return ResponseEntity.ok(consumidor);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Consumidor não encontrado.");
+                }
+            }
+
+            if (usuario != null) {
+                return ResponseEntity.ok(usuario);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar usuário.");
+        }
+    }
 }
