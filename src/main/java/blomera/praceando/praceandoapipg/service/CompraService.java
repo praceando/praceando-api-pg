@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -64,8 +65,19 @@ public class CompraService {
         jdbcTemplate.execute((ConnectionCallback<Void>) con -> {
             try (CallableStatement callableStatement = con.prepareCall("CALL PRC_REALIZAR_COMPRA(?, ?, ?, ?)")) {
                 callableStatement.setInt(1, cdUsuario);
-                callableStatement.setInt(2, cdProduto);
-                callableStatement.setInt(3, cdEvento);
+
+                if (cdProduto != null) {
+                    callableStatement.setInt(2, cdProduto);
+                } else {
+                    callableStatement.setNull(2, Types.INTEGER);
+                }
+
+                if (cdEvento != null) {
+                    callableStatement.setInt(3, cdEvento);
+                } else {
+                    callableStatement.setNull(3, Types.INTEGER);
+                }
+
                 callableStatement.setBigDecimal(4, vlTotal);
 
                 callableStatement.execute();
