@@ -67,8 +67,8 @@ public class CompraController {
         try {
             compraService.saveCompra(
                     compraRequestDTO.getCdUsuario().intValue(),
-                    compraRequestDTO.getCdProduto().intValue(),
-                    compraRequestDTO.getCdEvento().intValue(),
+                    compraRequestDTO.getCdProduto() != null ? compraRequestDTO.getCdProduto().intValue() : null,
+                    compraRequestDTO.getCdEvento() != null ? compraRequestDTO.getCdEvento().intValue() : null,
                     compraRequestDTO.getVlTotal()
             );
 
