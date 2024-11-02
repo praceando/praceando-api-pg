@@ -185,7 +185,7 @@ public class EventoService {
             java.sql.Array tagsArray = jdbcTemplate.getDataSource().getConnection().createArrayOf("VARCHAR", tags.toArray());
 
             jdbcTemplate.execute((ConnectionCallback<Void>) con -> {
-                try (CallableStatement callableStatement = con.prepareCall("CALL PRC_INSERIR_EVENTO_TAGS(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                try (CallableStatement callableStatement = con.prepareCall("CALL PRC_INSERIR_EVENTO_TAG(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                     callableStatement.setString(1, evento.getNmEvento());
                     callableStatement.setString(2, evento.getDsEvento());
                     callableStatement.setDate(3, java.sql.Date.valueOf(evento.getDtInicio()));
