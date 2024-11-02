@@ -31,7 +31,7 @@ A **Praceando API** foi desenvolvida para suportar o backend do aplicativo **Pra
 ### Acesse a documentação da API em:
 
 ```
-http://localhost:8080/swagger-ui.html
+https://praceando-api-pg.onrender.com/swagger-ui/index.html
 ```
 
 ## Endpoints Principais
