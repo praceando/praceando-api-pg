@@ -25,9 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/evento")
@@ -88,6 +86,7 @@ public class EventoController {
                                                        "    \"string\"\n" +
                                                        "  ]\n" +
                                                        "}") EventoRequest eventoRequest) {
+        Map<String, Object> response = new HashMap<>();
         try {
             Local local = localService.getLocalById(eventoRequest.getEvento().getLocal().getId());
             eventoRequest.getEvento().setLocal(local);
@@ -95,8 +94,11 @@ public class EventoController {
             Anunciante anunciante = anuncianteService.getAnuncianteById(eventoRequest.getEvento().getAnunciante().getId());
             eventoRequest.getEvento().setAnunciante(anunciante);
 
-            eventoService.saveEvento(eventoRequest.getEvento(), eventoRequest.getTags());
-            return ResponseEntity.status(HttpStatus.CREATED).body("Evento inserido com sucesso.");
+            Integer idEvento = eventoService.saveEvento(eventoRequest.getEvento(), eventoRequest.getTags());
+            response.put("message", "Evento inserido com sucesso");
+            response.put("idEvento", idEvento);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao inserir evento." + e.getMessage());
         }

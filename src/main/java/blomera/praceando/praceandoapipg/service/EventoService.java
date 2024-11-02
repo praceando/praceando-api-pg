@@ -178,14 +178,14 @@ public class EventoService {
     /**
      * Método para inserir um evento junto com suas tags.
      */
-    public void saveEvento(Evento evento, List<String> tags) {
+    public Integer saveEvento(Evento evento, List<String> tags) {
         try {
             evento.setQtInteresse(0);
 
             java.sql.Array tagsArray = jdbcTemplate.getDataSource().getConnection().createArrayOf("VARCHAR", tags.toArray());
 
-            jdbcTemplate.execute((ConnectionCallback<Void>) con -> {
-                try (CallableStatement callableStatement = con.prepareCall("CALL PRC_INSERIR_EVENTO_TAG(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+            return jdbcTemplate.execute((ConnectionCallback<Integer>) con -> {
+                try (CallableStatement callableStatement = con.prepareCall("CALL PRC_INSERIR_EVENTO_TAG(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                     callableStatement.setString(1, evento.getNmEvento());
                     callableStatement.setString(2, evento.getDsEvento());
                     callableStatement.setDate(3, java.sql.Date.valueOf(evento.getDtInicio()));
@@ -196,11 +196,14 @@ public class EventoService {
                     callableStatement.setInt(8, Long.valueOf(evento.getLocal().getId()).intValue());
                     callableStatement.setInt(9, evento.getAnunciante().getId().intValue());
                     callableStatement.setArray(10, tagsArray);
+
+                    callableStatement.registerOutParameter(11, java.sql.Types.INTEGER);
+
                     callableStatement.execute();
-                    return null;
+
+                    return callableStatement.getInt(11);
                 }
             });
-
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Erro ao salvar o evento e tags: " + e.getMessage(), e);
