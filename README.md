@@ -12,13 +12,16 @@ A **Praceando API** foi desenvolvida para suportar o backend do aplicativo **Pra
 
 - **Spring Boot** (Framework): Framework principal para o desenvolvimento da API.
 - **PostgreSQL** (Banco de Dados): Banco de dados relacional utilizado para persistência de dados.
-- **Swagger/OpenAPI (Springdoc)** (Ferramenta): Ferramenta para documentação interativa da API.
-- **Spring Security** (Framework): Framework para gerenciamento de segurança, autenticação e autorização.
-- **Lombok** (Biblioteca): Biblioteca para reduzir o código boilerplate com anotações, como getters e setters automáticos.
-- **Java Dotenv** (Biblioteca): Biblioteca para gerenciar variáveis de ambiente de forma prática.
-- **JJWT (Java JWT)** (Biblioteca): Biblioteca para manipulação de tokens JWT, essencial para autenticação e autorização.
-- **Hibernate Validator** (Biblioteca): Biblioteca para validação de dados nas entidades, utilizando anotações.
-- **JUnit e Spring Security Test** (Frameworks de Teste): Frameworks para testes unitários e de integração, garantindo a qualidade do código.
+- **Redis** (Cache): Utilizado para caching, ajudando a melhorar a performance e reduzir o número de consultas ao banco de dados.
+- **Swagger/OpenAPI (Springdoc)** (Documentação): Ferramenta para documentação interativa da API.
+- **Spring Security** (Segurança): Framework para autenticação e autorização, protegendo os endpoints da API.
+- **JWT (JSON Web Tokens)** (Autenticação): Implementado usando JJWT para manipulação e validação de tokens de autenticação.
+- **Lombok** (Redução de Código): Biblioteca que reduz código repetitivo com anotações como `@Getter` e `@Setter`.
+- **Hibernate** (ORM): Mapeamento objeto-relacional para facilitar a manipulação de dados no banco de dados.
+- **Java Dotenv** (Gerenciamento de Variáveis de Ambiente): Gerencia variáveis de ambiente necessárias para configuração e segurança.
+- **Hibernate Validator** (Validação de Dados): Valida dados com base em anotações nas entidades.
+- **JUnit** e **Spring Security Test** (Testes): Frameworks para testes unitários e de integração, garantindo a qualidade do código.
+- **Maven** (Build e Gerenciamento de Dependências): Gerenciador de build e dependências, essencial para manter o projeto organizado e com versões consistentes das bibliotecas.
 
 ## Como Executar a API
 

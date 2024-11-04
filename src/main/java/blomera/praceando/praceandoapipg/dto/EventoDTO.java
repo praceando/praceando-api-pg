@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -13,7 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class EventoDTO {
+public class EventoDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Long idEvento;
     private String nomeEvento;
     private String nomeLocal;
