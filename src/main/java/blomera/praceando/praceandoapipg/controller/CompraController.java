@@ -23,7 +23,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/compra")
@@ -64,15 +66,18 @@ public class CompraController {
             @ApiResponse(responseCode = "400", description = "Erro na requisição")
     })
     public ResponseEntity<?> inserirCompra(@RequestBody CompraRequestDTO compraRequestDTO) {
+        Map<String, Object> response = new HashMap<>();
         try {
-            compraService.saveCompra(
+            Integer idCompra = compraService.saveCompra(
                     compraRequestDTO.getCdUsuario().intValue(),
                     compraRequestDTO.getCdProduto() != null ? compraRequestDTO.getCdProduto().intValue() : null,
                     compraRequestDTO.getCdEvento() != null ? compraRequestDTO.getCdEvento().intValue() : null,
                     compraRequestDTO.getVlTotal()
             );
+            response.put("message", "Compra inserido com sucesso");
+            response.put("idCompra", idCompra);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Compra inserida com sucesso");
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao inserir compra: " + e.getMessage());

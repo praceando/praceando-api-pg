@@ -61,9 +61,9 @@ public class CompraService {
     /**
      * Método para inserir uma compra.
      */
-    public void saveCompra(Integer cdUsuario, Integer cdProduto, Integer cdEvento, BigDecimal vlTotal) {
-        jdbcTemplate.execute((ConnectionCallback<Void>) con -> {
-            try (CallableStatement callableStatement = con.prepareCall("CALL PRC_REALIZAR_COMPRA(?, ?, ?, ?)")) {
+    public Integer saveCompra(Integer cdUsuario, Integer cdProduto, Integer cdEvento, BigDecimal vlTotal) {
+        return jdbcTemplate.execute((ConnectionCallback<Integer>) con -> {
+            try (CallableStatement callableStatement = con.prepareCall("CALL PRC_REALIZAR_COMPRA(?, ?, ?, ?, ?)")) {
                 callableStatement.setInt(1, cdUsuario);
 
                 if (cdProduto != null) {
@@ -80,8 +80,11 @@ public class CompraService {
 
                 callableStatement.setBigDecimal(4, vlTotal);
 
+                callableStatement.registerOutParameter(5, java.sql.Types.INTEGER);
+
                 callableStatement.execute();
-                return null;
+
+                return callableStatement.getInt(5);
             } catch (SQLException e) {
                 e.printStackTrace();
                 throw new RuntimeException("Erro ao realizar compra: " + e.getMessage(), e);
