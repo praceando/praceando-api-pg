@@ -18,11 +18,20 @@
         <license/>
     </licenses>
     <developers>
-        <developer/>
+        <developer>
+            <id>millaUcci</id>
+            <name>Camilla Ucci</name>
+            <url>https://github.com/millaUcci</url>
+        </developer>
+        <developer>
+            <id>mayren-07</id>
+            <name>Mayla Renze</name>
+            <url>https://github.com/mayren-07</url>
+        </developer>
     </developers>
     <scm>
         <connection/>
-        <developerConnection/>
+        <developerConnection>scm:git:ssh://github.com:Praceando/PraceandoApiPg.git</developerConnection>
         <tag/>
         <url/>
     </scm>
@@ -117,6 +126,12 @@
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>6.2.0.Final</version>
+        </dependency>
+
+        <!-- Redis cache -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
     </dependencies>
 

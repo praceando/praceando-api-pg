@@ -11,6 +11,7 @@ package blomera.praceando.praceandoapipg.service;
 import blomera.praceando.praceandoapipg.dto.EventoDTO;
 import blomera.praceando.praceandoapipg.model.Evento;
 import blomera.praceando.praceandoapipg.repository.EventoRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,9 @@ public class EventoService {
     /**
      * @return uma lista de objetos EventoDTO (incluindo tags) se existirem, ou null se não houver nenhum evento.
      */
+    @Cacheable(value = "eventos", cacheManager = "cacheManager")
     public List<EventoDTO> getEventos() {
+        System.out.println("Fetching from database...");
         List<Object[]> resultados = eventoRepository.findAllWithTags();
 
         if (resultados == null) {
