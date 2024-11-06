@@ -38,19 +38,18 @@ public class EventoService {
     }
 
     /**
-     * @return uma lista de objetos EventoDTO (incluindo tags) se existirem, ou null se não houver nenhum evento.
+     * @param ids Lista de IDs de evento a serem buscados
+     * @return uma lista de objetos EventoDTO (incluindo tags) se existirem, ou null se não houver eventos para os IDs fornecidos.
      */
     @Cacheable(value = "eventos", cacheManager = "cacheManager")
-    public List<EventoDTO> getEventos() {
-        System.out.println("Fetching from database...");
-        List<Object[]> resultados = eventoRepository.findAllWithTags();
+    public List<EventoDTO> getEventosPorIds(List<Long> ids) {
+        List<Object[]> resultados = eventoRepository.findAllWithTagsByIds(ids);
 
-        if (resultados == null) {
+        if (resultados == null || resultados.isEmpty()) {
             return null;
         }
 
         List<EventoDTO> eventos = new ArrayList<>();
-
         for (Object[] resultado : resultados) {
             Long idEvento = (Long) resultado[0];
             String nomeEvento = (String) resultado[1];
@@ -65,9 +64,9 @@ public class EventoService {
             EventoDTO eventoDTO = new EventoDTO(idEvento, nomeEvento, nomeLocal, dataInicio, horaInicio, dataFim, horaFim, tags);
             eventos.add(eventoDTO);
         }
-
         return eventos;
     }
+
 
     /**
      * @return evento pelo id, se ele existir, caso contrário, retorna null

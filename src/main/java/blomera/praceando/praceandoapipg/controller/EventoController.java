@@ -9,6 +9,7 @@ package blomera.praceando.praceandoapipg.controller;
 
 import blomera.praceando.praceandoapipg.dto.EventoDTO;
 import blomera.praceando.praceandoapipg.dto.EventoRequest;
+import blomera.praceando.praceandoapipg.dto.IdsRequestDTO;
 import blomera.praceando.praceandoapipg.dto.InteresseRequestDTO;
 import blomera.praceando.praceandoapipg.model.*;
 import blomera.praceando.praceandoapipg.service.*;
@@ -44,20 +45,21 @@ public class EventoController {
         this.usuarioTagService = usuarioTagService;
     }
 
-    @GetMapping("/read")
-    @Operation(summary = "Lista todos os eventos", description = "Retorna uma lista de todos os eventos")
+    @PostMapping("/read")
+    @Operation(summary = "Lista eventos por IDs", description = "Retorna uma lista de eventos com base em uma lista de IDs fornecida")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de eventos retornada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Nenhum evento encontrado")
+            @ApiResponse(responseCode = "404", description = "Nenhum evento encontrado para os IDs fornecidos")
     })
-    public ResponseEntity<?> listarEventos() {
-        List<EventoDTO> eventos = eventoService.getEventos();
-        if (eventos != null) {
+    public ResponseEntity<?> listarEventos(@RequestBody IdsRequestDTO idsRequest) {
+        List<EventoDTO> eventos = eventoService.getEventosPorIds(idsRequest.getIds());
+        if (eventos != null && !eventos.isEmpty()) {
             return ResponseEntity.ok(eventos);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum evento encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum evento encontrado para os IDs fornecidos.");
         }
     }
+
 
     @PostMapping("/create")
     @Operation(summary = "Insere um novo evento", description = "Adiciona um novo evento ao sistema")
