@@ -50,6 +50,16 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
             "JOIN local l ON l.id_local = e.cd_local " +
             "JOIN evento_tag et ON et.cd_evento = e.id_evento " +
             "JOIN tag t ON t.id_tag = et.cd_tag " +
+            "WHERE e.id_evento IN :ids " +
+            "AND e.dt_desativacao IS NULL " +
+            "GROUP BY e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim", nativeQuery = true)
+    List<Object[]> findAllWithTagsByIds(@Param("ids") List<Long> ids);
+
+    @Query(value = "SELECT e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim, array_agg(t.nm_tag) AS tags " +
+            "FROM evento e " +
+            "JOIN local l ON l.id_local = e.cd_local " +
+            "JOIN evento_tag et ON et.cd_evento = e.id_evento " +
+            "JOIN tag t ON t.id_tag = et.cd_tag " +
             "WHERE e.dt_desativacao IS NULL " +
             "GROUP BY e.id_evento, e.nm_evento, l.nm_local, e.dt_inicio, e.hr_inicio, e.dt_fim, e.hr_fim", nativeQuery = true)
     List<Object[]> findAllWithTags();
