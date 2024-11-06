@@ -13,6 +13,7 @@ import blomera.praceando.praceandoapipg.repository.UsuarioRepository;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.CallableStatement;
@@ -26,10 +27,12 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final JdbcTemplate jdbcTemplate;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, JdbcTemplate jdbcTemplate) {
+    public UsuarioService(UsuarioRepository usuarioRepository, JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.jdbcTemplate = jdbcTemplate;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -140,6 +143,21 @@ public class UsuarioService {
                 throw new RuntimeException("Erro adicionar inventário: " + e.getMessage(), e);
             }
         });
+    }
+
+    public boolean authenticateAdmin(String email, String password) {
+        Optional<Usuario> userOptional = usuarioRepository.findUsuarioByDsEmailEqualsIgnoreCaseAndDtDesativacaoIsNull(email);
+
+        if (userOptional.isPresent()) {
+            System.out.println("ADMIN EXISTE");
+            Usuario user = userOptional.get();
+
+            if (passwordEncoder.matches(password, user.getDsSenha())) {
+                System.out.println("SENHA CERTA");
+                return user.getAcesso().getId() == 3;
+            }
+        }
+        return false;
     }
 }
 

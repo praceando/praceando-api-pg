@@ -7,7 +7,7 @@
  */
 package blomera.praceando.praceandoapipg.controller;
 
-import blomera.praceando.praceandoapipg.dto.InteresseRequestDTO;
+import blomera.praceando.praceandoapipg.authentication.model.LoginRequest;
 import blomera.praceando.praceandoapipg.dto.InventarioRequestDTO;
 import blomera.praceando.praceandoapipg.dto.UsuarioDTO;
 import blomera.praceando.praceandoapipg.model.Anunciante;
@@ -195,6 +195,19 @@ public class UsuarioController {
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar usuário.");
+        }
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        String email = loginRequest.getDsEmail();
+        String password = loginRequest.getDsSenha();
+
+        if (usuarioService.authenticateAdmin(email, password)) {
+            return ResponseEntity.ok("Login successful, admin access granted.");
+        } else {
+            return ResponseEntity.status(403).body("Access denied: Only admins can log in.");
         }
     }
 }
