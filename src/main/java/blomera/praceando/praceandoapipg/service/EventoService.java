@@ -11,6 +11,7 @@ package blomera.praceando.praceandoapipg.service;
 import blomera.praceando.praceandoapipg.dto.EventoDTO;
 import blomera.praceando.praceandoapipg.model.Evento;
 import blomera.praceando.praceandoapipg.repository.EventoRepository;
+import blomera.praceando.praceandoapipg.repository.InteresseRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,20 +22,19 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class EventoService {
 
     private final EventoRepository eventoRepository;
+    private final InteresseRepository interesseRepository;
     private final JdbcTemplate jdbcTemplate;
 
-    public EventoService(EventoRepository eventoRepository, JdbcTemplate jdbcTemplate) {
+    public EventoService(EventoRepository eventoRepository, JdbcTemplate jdbcTemplate, InteresseRepository interesseRepository) {
         this.eventoRepository = eventoRepository;
         this.jdbcTemplate = jdbcTemplate;
+        this.interesseRepository = interesseRepository;
     }
 
     /**
@@ -167,6 +167,23 @@ public class EventoService {
         }
 
         return eventos;
+    }
+
+    public Map<String, Object> getQtInteresseAndUserInterest(Long idEvento, Long idUsuario) {
+        Map<String, Object> response = new HashMap<>();
+
+        Optional<Evento> evento = eventoRepository.findById(idEvento);
+        if (evento.isPresent()) {
+            Evento eventoData = evento.get();
+            response.put("qtInteresse", eventoData.getQtInteresse());
+
+            boolean userHasInterest = interesseRepository.existsByConsumidorIdAndEventoId(idUsuario, idEvento);
+            response.put("userInteressou", userHasInterest);
+        } else {
+            response.put("message", "Evento não encontrado.");
+        }
+
+        return response;
     }
 
     /**

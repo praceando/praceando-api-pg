@@ -198,8 +198,13 @@ public class UsuarioController {
         }
     }
 
-    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = {"https://praceando-area-restrita.onrender.com", "http://127.0.0.1:5500"})
     @PostMapping("/login")
+    @Operation(summary = "Login de administrador", description = "Permite que um administrador faça login na plataforma.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login successful, admin access granted."),
+            @ApiResponse(responseCode = "403", description = "Access denied: Only admins can log in.")
+    })
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         String email = loginRequest.getDsEmail();
         String password = loginRequest.getDsSenha();
