@@ -236,4 +236,21 @@ public class EventoController {
         }
     }
 
+    @GetMapping("/find-interesse")
+    @Operation(summary = "Busca o interesse no evento para o usuário", description = "Retorna a quantidade de interesses no evento e se o usuário já demonstrou interesse.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados de interesse retornados com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Evento não encontrado")
+    })
+    public ResponseEntity<?> getQtInteresseAndUserInterest(
+            @RequestParam Long idEvento,
+            @RequestParam Long idUsuario) {
+
+        Map<String, Object> interesseData = eventoService.getQtInteresseAndUserInterest(idEvento, idUsuario);
+        if (interesseData.containsKey("qtInteresse")) {
+            return ResponseEntity.ok(interesseData);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Evento não encontrado.");
+        }
+    }
 }
