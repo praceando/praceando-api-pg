@@ -95,6 +95,7 @@ public class UsuarioController {
             } else if (usuario.getAcesso().getId() == 1) {
                 Consumidor consumidor = consumidorService.getConsumidorById(usuario.getId());
                 response.put("nome", consumidor != null ? consumidor.getNmNickname() : "Nome não disponível");
+                response.put("nrPolen", consumidor != null ? String.valueOf(consumidor.getNrPolen()) : "Quantidade de pólen não disponível");
             } else {
                 response.put("nome", usuario.getNmUsuario());
             }
@@ -102,6 +103,7 @@ public class UsuarioController {
             response.put("inventario", String.valueOf(usuario.getCdInventarioAvatar()));
             response.put("tipoUsuario", String.valueOf(usuario.getAcesso().getId()));
             response.put("bio", usuario.getDsUsuario());
+            response.put("isPremium", String.valueOf(usuario.getIsPremium()));
 
             return ResponseEntity.ok(response);
         } else {
